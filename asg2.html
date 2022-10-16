@@ -20,7 +20,6 @@
 
     <div style="position: absolute; left: 20; top: 400px;">
       <p id="numdot">XXX</p> <p style="display:inline">Mode: <p style="display:inline" id="mode">draw</p></p> 
-      <p id="rainMode">Randomize Color: Off</p>
       <p>
         <button type="button" id="green">Green</button>
         <button type="button" id="red">Red</button>
@@ -31,15 +30,9 @@
         <button type="button" id="triButton">Triangle</button>
         <button type="button" id="cirButton">Circle</button>
       <p>
-        <button type="button" id="houseButton">HOUSE</button>
-        <button type="button" id="dinoButton">DINOSAUR</button>
-        <button type="button" id="susButton">AMOGUS</button>
-        <button type="button" id="rainButton">RAINBOW</button>
         
-        
-      
       <p style="display:inline">
-      Red <input type="range" min="0" max="100" value="100" class="slider" id="redSlide">
+      Red <input type="range" min="0" max="360" value="0" class="slider" id="angleSlide">
       <p style="display:inline" id="widthmode">House width: </p><input type="range" min="2" max="15" value="5" class="slider" id="hWidthSlide">
       <p>
       Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlide">
@@ -55,32 +48,20 @@
 
     </div>
 
-    <div style="position: absolute; left: 850px; top: 20px;">
-      <h1>Awesomeness</h1> 
-      <h3>
-      <ul>
-        <li>Using a noise function, I generated houses and among us crewmates that look "hand-drawn".</li>
-        <li>They function like stamps. Click on a location and the stamp appears.</li>
-        <li>Use SUS level/house width and house height sliders to adjust the size.</li>
-        <li>It was intentional to allow users to pick the color and brush to use</li>
-        <li>Opacity</li>
-        <li>Rainbow color brush</li>
-        <li>Cool Dinosaur (step 12)</li>
-        <li>Having some indicators for rainbow, sus, and house.</li>
-      </ul>
-      <h3>
 
-    </div>
 
     <script src="./lib/webgl-utils.js"></script>
     <script src="./lib/webgl-debug.js"></script>
     <script src="./lib/cuon-utils.js"></script>
+    <script src="./lib/cuon-matrix.js"></script>
     <script src="./lib/noise-utils.js"></script>
-    <script src="./asg1.js"></script>   
+    <script src="./asg2.js"></script>   
     <script src="./Circle.js"></script>
     <script src="./Triangle.js"></script>
     <script src="./Point.js"></script>
-    <script src="./awesome.js"></script>
+    <script src="./Cube.js"></script>
+    <script src="./Prism.js"></script>
+    
 
   </body>
 </html>
