@@ -91,7 +91,11 @@ const CIRCLE = 2;
 let saved = [];
 
 let g_selectedAlpha = 1.0;
-let g_globalAngle = 0;
+let g_globalXAngle = 0;
+let g_globalYAngle = 0;
+let g_globalZAngle = 0;
+let g_zoomScale = 1;
+
 let g_selectedColor=[1.0,0.0,0.0,g_selectedAlpha];
 let g_selectedType= POINT;
 let g_selectedSize = 5.0;
@@ -99,41 +103,63 @@ let g_selectedSegs = 10;
 
 function addActionsForHtmlUI(){
   // Button events
-  document.getElementById('green').onclick = function() { 
-    g_selectedColor = [0.0, 1.0, 0.0, g_selectedAlpha]; 
-    updateSliders();
-  };
-  document.getElementById('red').onclick = function() {
-    g_selectedColor = [1.0, 0.0, 0.0, g_selectedAlpha]; 
-    updateSliders(); 
-  };
-  document.getElementById('clear').onclick = function() { 
-      g_shapesList = []; 
-      renderScene();
-    };
+  // document.getElementById('green').onclick = function() { 
+  //   g_selectedColor = [0.0, 1.0, 0.0, g_selectedAlpha]; 
+  //   updateSliders();
+  // };
+  // document.getElementById('red').onclick = function() {
+  //   g_selectedColor = [1.0, 0.0, 0.0, g_selectedAlpha]; 
+  //   updateSliders(); 
+  // };
+  // document.getElementById('clear').onclick = function() { 
+  //     g_shapesList = []; 
+  //     renderScene();
+  //   };
 
 
-  document.getElementById('pointButton').onclick = function() { g_selectedType = POINT; }
-  document.getElementById('triButton').onclick = function() { g_selectedType = TRIANGLE; }
-  document.getElementById('cirButton').onclick = function() { g_selectedType = CIRCLE; }
+  // document.getElementById('pointButton').onclick = function() { g_selectedType = POINT; }
+  // document.getElementById('triButton').onclick = function() { g_selectedType = TRIANGLE; }
+  // document.getElementById('cirButton').onclick = function() { g_selectedType = CIRCLE; }
 
   
 
-  document.getElementById("angleSlide").addEventListener('mousemove', function(ev) {
+  document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
-      g_globalAngle = this.value; 
+      g_globalXAngle = this.value; 
       renderScene(); 
-      console.log("pp")
+      //console.log("pp")
     }
   });
-  document.getElementById("greenSlide").addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
-  document.getElementById("blueSlide").addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
-  document.getElementById("sizeSlide").addEventListener('mouseup', function() {g_selectedSize = this.value; });
-  document.getElementById("alphaSlide").addEventListener('mouseup', function() {
-    g_selectedAlpha = this.value/100; 
-    g_selectedColor[3] = g_selectedAlpha;
+
+  document.getElementById("yangleSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_globalYAngle = this.value; 
+      renderScene(); 
+      //console.log("pp")
+    }
   });
-  document.getElementById("segsSlide").addEventListener('mouseup', function() {g_selectedSegs = this.value; });
+
+  document.getElementById("zangleSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_globalZAngle = this.value; 
+      renderScene(); 
+      //console.log("pp")
+    }
+  });
+
+  document.getElementById("zoomSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_zoomScale = this.value/50; 
+      renderScene(); 
+      //console.log("pp")
+    }
+  });
+  
+  // document.getElementById("alphaSlide").addEventListener('mouseup', function() {
+  //   g_selectedAlpha = this.value/100; 
+  //   g_selectedColor[3] = g_selectedAlpha;
+  // });
+  // document.getElementById("segsSlide").addEventListener('mouseup', function() {g_selectedSegs = this.value; });
 
 }
 
@@ -239,31 +265,79 @@ function pop(){
 function renderScene(){
   var startTime = performance.now();
  
-  var globalRotMat = new Matrix4().rotate(g_globalAngle, -1, 1, -1);
+  var globalRotMat = new Matrix4()
+  globalRotMat.rotate(g_globalXAngle, 1, 0, 0);
+  globalRotMat.rotate(g_globalYAngle, 0, 1, 0);
+  globalRotMat.rotate(g_globalZAngle, 0, 0, 1);
+  globalRotMat.scale(g_zoomScale, g_zoomScale, g_zoomScale);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 
-  // let M = new Matrix4().scale(2, 1, 2);
-  // drawCube([1, 0.7, 0.2, 1], M);
+  let M = new Matrix4();
+  
+  let i = new Jester();
+  i.render();
+  // // drawCube([1, 0.7, 0.2, 1], M);
 
-  let p1 = new Prism(3);
-  p1.setSideLength(1);
-  //p1.render();
+  // let p1 = new Prism(3);
+  // p1.setSideLength(1);
+  // //p1.render();
 
-  let p2 = new Prism(4);
-  p2.setSideLength(1);
-  //p2.render();
-  let p3 = new Prism(3, 1.0, [1, 0, 1, 1]);
-  p3.setMaxWidth(1);
-  p3.render();
-  let p4 = new Prism(6);
+  // let p2 = new Prism(4, 1, [1, 0.1, 1, 1]);
+  // p2.translate(0.2, 0, 0);
+  
+  // p2.rotate(70, 0, 0, 1);
+  
+  // p2.setSideLength(0.5);
+  // p2.render();
+
+  // let M_torso = new Matrix4();
+
+  
+  // //let M_torso = new Matrix4();
+  // M_torso.translate(0, -0.4, 0);
+
+  // let M_lchest = new Matrix4(M_torso);
+
+  // M_torso.scale(0.5, 0.5, 0.5);
+  // let p3 = new Prism(10, 1.0, [1, 0, 1, 1], M_torso);
+  // p3.setMaxWidth(1);
+  // p3.scaleFace("b", 2);
+  // //p3.setHeight(1.7);
+  // p3.render();
+
+
+  // M_lchest.translate(0, 0.4, 0);
+  // //M_lchest.rotate(45, 0, 0, 1);
+
+  // let M_uchest = new Matrix4(M_lchest);
+
+  // M_lchest.scale(0.5, -0.5, 0.5);
+  // let p4 = new Pyramid(10, 1.0, [1, 0, 1, 1], M_lchest);
+  // p4.setMaxWidth(1);
+  // p4.scaleFace(1.2);
+  // p4.render();
+  
+
+  // M_uchest.translate(0, 0.45, 0);
+
+  // M_uchest.scale(0.5, 0.4, 0.5);
+  // let p5 = new Prism(10, 1.0, [1, 0, 1, 1], M_uchest);
+  // p5.setMaxWidth(1);
+  // p5.scaleFace("b", 1.2);
+  // p5.scaleFace("t", 0.5);
+  // //p5.setHeight();
+  // p5.render();
+  
+
+  //let p6 = new Prism(6);
   // var len = g_shapesList.length;
   // for(var i = 0; i < len; i++) {
   //   g_shapesList[i].render();
   // }
-  //drawTriangle3D([-1.0, 0.0, 0.0,     -0.5, -1.0, 0.0,    0.0, 0.0, -1.0]);
+  //this.drawTriangle3D([-1.0, 0.0, 0.0,     -0.5, -1.0, 0.0,    0.0, 0.0, -1.0]);
   
   // var body = new Cube([1.0, 0.0, 0.0, 1.0]);
   // body.translate(-0.25, -0.1, 0.0);

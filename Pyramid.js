@@ -1,52 +1,19 @@
-class Prism extends Solid{
+class Pyramid extends Solid{
     constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
-        super();
-        this.type='prism';
+        this.type='pyramid';
         this.color = color_;
         this.r = 1.0;
         this.matrix = matrix_; 
         this.numV = numV_
         this.cangle=360/numV_;
         this.h = h_;
-        this.topface = [];
+        //this.topface = [];
+        this.apex = [0, 0]
         this.botface = [];
         
         this.calculateVerts(); // You really only need to compute the vertices once!
     }
 
-    scaleFace(mode="b", scale){
-        var face = (mode == 't')? this.topface : this.botface;
-        //console.log(face);
-        face.forEach(function(item, index, array){
-            array[index][0] *= scale;
-            array[index][1] *= scale;
-        })
-        //console.log(face);
-    }
-
-    translateFace(mode="b", x, z){
-        var face = (mode == "t") ? this.topface : this.botface; 
-        face.forEach(function(item, index, array){
-            array[index][0] += x;
-            array[index][1] += z;
-        })
-    }
-
-    calculateVerts(){
-        this.vertices = [];
-        this.topface=[];
-        this.botface=[];
-        // Calculate regular polygon
-        
-        let startAng = -(180-this.cangle)/2;
-        for (let currAngle = -startAng; currAngle < 360-startAng; currAngle += this.cangle){
-            // let nextAngle = currAngle+angleStep;
-            this.topface.push([Math.cos(currAngle*Math.PI/180)*this.r, 
-                        Math.sin(currAngle*Math.PI/180)*this.r]); // currently their squares add up to r!
-            this.botface.push([Math.cos(currAngle*Math.PI/180)*this.r, 
-                        Math.sin(currAngle*Math.PI/180)*this.r]);
-        }
-    }
 
     setMaxWidth(w){
         this.r = w/2; // guaranteed
@@ -60,6 +27,39 @@ class Prism extends Solid{
 
     setHeight(h_){
         this.h = h_;
+    }
+
+    calculateVerts(){
+        this.vertices = [];
+        this.topface=[];
+        this.botface=[];
+        // Calculate regular polygon
+        
+        let startAng = -(180-this.cangle)/2;
+        for (let currAngle = -startAng; currAngle < 360-startAng; currAngle += this.cangle){
+            // let nextAngle = currAngle+angleStep;
+            this.botface.push([Math.cos(currAngle*Math.PI/180)*this.r, 
+                        Math.sin(currAngle*Math.PI/180)*this.r]);
+        }
+    }
+
+    scaleFace(scale){
+        this.botface.forEach(function(item, index, array){
+            array[index][0] *= scale;
+            array[index][1] *= scale;
+        })
+        //console.log(face);
+    }
+
+    translateFace(x, z){
+        this.botface.forEach(function(item, index, array){
+            array[index][0] += x;
+            array[index][1] += z;
+        })
+    }
+
+    translateApex(x, y, z){
+        // Do i need this?
     }
 
     render(){
@@ -83,27 +83,8 @@ class Prism extends Solid{
             gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
             this.drawTriangle3D([this.botface[i][0],     -f, this.botface[i][1], 
-                            this.topface[(i+1)%this.numV][0],    f, this.topface[(i+1)%this.numV][1],
-                            this.topface[i][0],      f, this.topface[i][1]]); // top lateral
-
-            this.drawTriangle3D([this.botface[i][0],     -f, this.botface[i][1], 
                             this.botface[(i+1)%this.numV][0],   -f, this.botface[(i+1)%this.numV][1],
-                            this.topface[(i+1)%this.numV][0],    f, this.topface[(i+1)%this.numV][1]]); // bot lateral
-
-
-        }
-
-        rgba.forEach(function(item, index, array){
-            array[index] = 0.7*item;
-        })
-
-        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-
-        // Draw top face
-        for (let i = 1; i <= this.numV - 2; i++){
-            this.drawTriangle3D([this.topface[i][0],     f, this.topface[i][1], 
-                            this.topface[i+1][0],   f, this.topface[i+1][1],
-                            this.topface[0][0],     f, this.topface[0][1]]);
+                            this.apex[0],    f, this.apex[1]]); // bot lateral
         }
 
         rgba.forEach(function(item, index, array){
@@ -119,11 +100,5 @@ class Prism extends Solid{
                             this.botface[0][0],     -f, this.botface[0][1]]);
         }
     }
-}
 
-
-function lerp(x, a, b, v, w){ // x is a value between a & b, v & w are corresp. weights to a & b, resp.
-    if (a > b) return lerp(x, b, a, w, v);
-    let f = (x-a)/(b-a); // Find fraction x has made from a to b
-    return v + f * (w - v); // use that fraction to find the associated value for x
 }

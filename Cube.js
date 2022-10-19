@@ -1,25 +1,10 @@
-class Cube{
+class Cube extends Solid{
     constructor(color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
+        super();
         this.type='cube';
         this.color = color_;
         this.size = 1.0;
         this.matrix = matrix_; 
-    }
-
-    setMatrix(matrix_){
-        this.matrix = matrix_;
-    }
-
-    translate(...a){
-        this.matrix.translate(...a);
-    }
-
-    scale(...a){
-        this.matrix.scale(...a);
-    }
-
-    rotate(...a){
-        this.matrix.rotate(...a);
     }
 
     render(){
@@ -42,35 +27,35 @@ class Cube{
 
             gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
-            drawTriangle3D([vec1[0], -s, vec1[1],      vec2[0],   s, vec2[1],        vec2[0], -s, vec2[1]]);
-            drawTriangle3D([vec1[0], -s, vec1[1],      vec1[0],   s, vec1[1],        vec2[0],   s, vec2[1]]);
+            this.drawTriangle3D([vec1[0], -s, vec1[1],      vec2[0],   s, vec2[1],        vec2[0], -s, vec2[1]]);
+            this.drawTriangle3D([vec1[0], -s, vec1[1],      vec1[0],   s, vec1[1],        vec2[0],   s, vec2[1]]);
 
 
         }
 
         // gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-        // drawTriangle3D([-s, -s, -s,        s,   s, -s,        s, -s, -s]);
-        // drawTriangle3D([-s, -s, -s,      -s,   s, -s,        s,   s, -s]);
+        // this.drawTriangle3D([-s, -s, -s,        s,   s, -s,        s, -s, -s]);
+        // this.drawTriangle3D([-s, -s, -s,      -s,   s, -s,        s,   s, -s]);
 
         // gl.uniform4f(u_FragColor, rgba[0]*0.5, rgba[1], rgba[2]*0.5, rgba[3]);
-        // drawTriangle3D([-s, -s,   s,      -s,   s, -s,      -s, -s, -s]);
-        // drawTriangle3D([-s, -s,   s,      -s,   s,   s,      -s,   s, -s]);
+        // this.drawTriangle3D([-s, -s,   s,      -s,   s, -s,      -s, -s, -s]);
+        // this.drawTriangle3D([-s, -s,   s,      -s,   s,   s,      -s,   s, -s]);
 
         // gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-        // drawTriangle3D([  s, -s,   s,      -s,   s,   s,      -s, -s,   s]);
-        // drawTriangle3D([  s, -s,   s,        s,   s,   s,      -s,   s,   s]);
+        // this.drawTriangle3D([  s, -s,   s,      -s,   s,   s,      -s, -s,   s]);
+        // this.drawTriangle3D([  s, -s,   s,        s,   s,   s,      -s,   s,   s]);
 
         // gl.uniform4f(u_FragColor, rgba[0]*0.5, rgba[1], rgba[2]*0.5, rgba[3]);
-        // drawTriangle3D([  s, -s, -s,        s,   s,   s,       s,  -s,   s]);
-        // drawTriangle3D([  s, -s, -s,        s,   s, -s,       s,    s,   s]);
+        // this.drawTriangle3D([  s, -s, -s,        s,   s,   s,       s,  -s,   s]);
+        // this.drawTriangle3D([  s, -s, -s,        s,   s, -s,       s,    s,   s]);
 
         gl.uniform4f(u_FragColor, rgba[0]*0.2, rgba[1]*0.2, rgba[2]*0.2, rgba[3]);
-        drawTriangle3D([-s,   s,  -s,        s,   s,   s,       s,    s, -s]);
-        drawTriangle3D([-s,   s, -s,      -s,   s,   s,       s,    s,   s]);
+        this.drawTriangle3D([-s,   s,  -s,        s,   s,   s,       s,    s, -s]);
+        this.drawTriangle3D([-s,   s, -s,      -s,   s,   s,       s,    s,   s]);
 
         gl.uniform4f(u_FragColor, rgba[0]*0.2, rgba[1]*0.2, rgba[2]*0.2, rgba[3]);
-        drawTriangle3D([-s, -s,   s,        s, -s, -s,       s,  -s,   s]);
-        drawTriangle3D([-s, -s,   s,      -s, -s, -s,       s,  -s, -s]);
+        this.drawTriangle3D([-s, -s,   s,        s, -s, -s,       s,  -s,   s]);
+        this.drawTriangle3D([-s, -s,   s,      -s, -s, -s,       s,  -s, -s]);
     }
 }
 

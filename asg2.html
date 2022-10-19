@@ -20,7 +20,7 @@
 
     <div style="position: absolute; left: 20; top: 400px;">
       <p id="numdot">XXX</p> <p style="display:inline">Mode: <p style="display:inline" id="mode">draw</p></p> 
-      <p>
+      <!-- <p>
         <button type="button" id="green">Green</button>
         <button type="button" id="red">Red</button>
         <button type="button" id="clear">Clear</button>
@@ -30,17 +30,15 @@
         <button type="button" id="triButton">Triangle</button>
         <button type="button" id="cirButton">Circle</button>
       <p>
-        
+         -->
       <p style="display:inline">
-      Red <input type="range" min="0" max="360" value="0" class="slider" id="angleSlide">
-      <p style="display:inline" id="widthmode">House width: </p><input type="range" min="2" max="15" value="5" class="slider" id="hWidthSlide">
+      X angle <input type="range" min="0" max="360" value="0" class="slider" id="xangleSlide">
+      
+      Y angle<input type="range" min="0" max="360" value="0" class="slider" id="yangleSlide">
+      
+      Z angle <input type="range" min="0" max="360" value="0" class="slider" id="zangleSlide">
       <p>
-      Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlide">
-      House height: <input type="range" min="2" max="15" value="5" class="slider" id="hHeightSlide">
-      <p>
-      Blue <input type="range" min="0" max="100" value="0" class="slider" id="blueSlide">
-      <p>
-      Alpha <input type="range" min="0" max="100" value="100" class="slider" id="alphaSlide">
+      Zoom <input type="range" min="1" max="100" value="50" class="slider" id="zoomSlide">
       <p>
       Size <input type="range" min="5" max="40" value="5" class="slider" id="sizeSlide">
       <p>
@@ -59,8 +57,12 @@
     <script src="./Circle.js"></script>
     <script src="./Triangle.js"></script>
     <script src="./Point.js"></script>
+    <script src="./Solid.js"></script>
     <script src="./Cube.js"></script>
     <script src="./Prism.js"></script>
+    <script src="./Pyramid.js"></script>
+    <script src="./Icosahedron.js"></script>
+    <script src="./Jester.js"></script>
     
 
   </body>
