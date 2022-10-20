@@ -1,13 +1,10 @@
 class Pyramid extends Solid{
     constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
-        this.type='pyramid';
-        this.color = color_;
+        super('pyramid', color_, matrix_);
         this.r = 1.0;
-        this.matrix = matrix_; 
         this.numV = numV_
         this.cangle=360/numV_;
         this.h = h_;
-        //this.topface = [];
         this.apex = [0, 0]
         this.botface = [];
         
@@ -30,8 +27,7 @@ class Pyramid extends Solid{
     }
 
     calculateVerts(){
-        this.vertices = [];
-        this.topface=[];
+        this.reset();
         this.botface=[];
         // Calculate regular polygon
         
@@ -41,48 +37,21 @@ class Pyramid extends Solid{
             this.botface.push([Math.cos(currAngle*Math.PI/180)*this.r, 
                         Math.sin(currAngle*Math.PI/180)*this.r]);
         }
-    }
 
-    scaleFace(scale){
-        this.botface.forEach(function(item, index, array){
-            array[index][0] *= scale;
-            array[index][1] *= scale;
-        })
-        //console.log(face);
-    }
+        let rgba = this.color.slice();
+        let v = this.numV;
 
-    translateFace(x, z){
-        this.botface.forEach(function(item, index, array){
-            array[index][0] += x;
-            array[index][1] += z;
-        })
-    }
-
-    translateApex(x, y, z){
-        // Do i need this?
-    }
-
-    render(){
-        var rgba = this.color;
-        var v = this.numV;
-        // generates a kind of fan...
-        gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
-
-        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         
         let f = this.h/2;
-        console.log(this.topface);
 
         // Draw lateral faces
-
         for (let i = 0; i < this.numV; i++){
-            
             rgba.forEach(function(item, index, array){
                 array[index] = lerp(i, 0, v, rgba[index]*0.7, rgba[index]);
             })
-            gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+            this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);
 
-            this.drawTriangle3D([this.botface[i][0],     -f, this.botface[i][1], 
+            this.pushTriangle3D([this.botface[i][0],     -f, this.botface[i][1], 
                             this.botface[(i+1)%this.numV][0],   -f, this.botface[(i+1)%this.numV][1],
                             this.apex[0],    f, this.apex[1]]); // bot lateral
         }
@@ -91,14 +60,33 @@ class Pyramid extends Solid{
             array[index] = 0.7*item;
         })
 
-        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+        this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);
 
         // Draw bottom face
+        let botface = [];
         for (let i = 1; i <= this.numV - 2; i++){
-            this.drawTriangle3D([this.botface[i][0],     -f, this.botface[i][1], 
+            botface.push(this.botface[i][0],     -f, this.botface[i][1], 
                             this.botface[i+1][0],   -f, this.botface[i+1][1],
-                            this.botface[0][0],     -f, this.botface[0][1]]);
+                            this.botface[0][0],     -f, this.botface[0][1]);
         }
+        this.pushTriangle3D(botface);
     }
 
+    scaleFace(scale){
+        this.botface.forEach(function(item, index, array){
+            array[index][0] *= scale;
+            array[index][1] *= scale;
+        })
+    }
+
+    // translateFace(x, z){
+    //     this.botface.forEach(function(item, index, array){
+    //         array[index][0] += x;
+    //         array[index][1] += z;
+    //     })
+    // }
+
+    // translateApex(x, y, z){
+    //     // Do i need this?
+    // }
 }

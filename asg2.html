@@ -6,20 +6,25 @@
   </head>
 
   <body onload="main()">
-    <div style="position: absolute; left: 20; top: 20;">
+    <div id="drawcanvas" style="position: absolute; left: 20; top: 20;">
       
-      <canvas id="webgl" width="400" height="400"
+      <canvas id="webgl" width="800" height="800"
       style="position: absolute; left: 0; top: 0;">
       Please use a browser that supports "canvas"
       </canvas>
-      <img src="./img_dino.jpg" alt="Dino" width="400" height="400" style="position: relative; left: 420px; top: 0;">
-      
-      
     </div>
     
+    <div id="anglePanel" style="position: absolute; left: 820px; top: 20;">
+      Torso angle <input type="range" min="-45" max="45" value="0" class="slider" id="pelvisSlide">
+      
+      Chest angle <input type="range" min="-45" max="45" value="0" class="slider" id="uchestSlide">
+      
+      Neck Angle <input type="range" min="-45" max="45" value="0" class="slider" id="headSlide">
 
-    <div style="position: absolute; left: 20; top: 400px;">
-      <p id="numdot">XXX</p> <p style="display:inline">Mode: <p style="display:inline" id="mode">draw</p></p> 
+    </div>
+    
+    <div id="" style="position: absolute; left: 20; top: 800px;">
+      <p id="numdot">XXX</p> 
       <!-- <p>
         <button type="button" id="green">Green</button>
         <button type="button" id="red">Red</button>
@@ -38,7 +43,7 @@
       
       Z angle <input type="range" min="0" max="360" value="0" class="slider" id="zangleSlide">
       <p>
-      Zoom <input type="range" min="1" max="100" value="50" class="slider" id="zoomSlide">
+      Zoom <input type="range" min="1" max="100" value="25" class="slider" id="zoomSlide">
       <p>
       Size <input type="range" min="5" max="40" value="5" class="slider" id="sizeSlide">
       <p>

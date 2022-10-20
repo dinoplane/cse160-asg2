@@ -30,6 +30,8 @@ let u_FragColor;
 let u_ModelMatrix;
 let u_GlobalRotateMatrix;
 
+let jester;
+
 function setupWebGL(){
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
@@ -94,7 +96,7 @@ let g_selectedAlpha = 1.0;
 let g_globalXAngle = 0;
 let g_globalYAngle = 0;
 let g_globalZAngle = 0;
-let g_zoomScale = 1;
+let g_zoomScale = 0.5;
 
 let g_selectedColor=[1.0,0.0,0.0,g_selectedAlpha];
 let g_selectedType= POINT;
@@ -155,6 +157,33 @@ function addActionsForHtmlUI(){
     }
   });
   
+  document.getElementById("pelvisSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      jester.rotateAppendage("pelvis", this.value, 'z');
+      renderScene();
+      //jester.render();
+      //console.log("pp")
+    }
+  });
+
+  document.getElementById("uchestSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      jester.rotateAppendage("uchest", this.value, 'z');
+      renderScene();
+      //jester.render();
+      //console.log("pp")
+    }
+  });
+
+  document.getElementById("headSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      jester.rotateAppendage("head", this.value, 'z');
+      renderScene();
+      //jester.render();
+      //console.log("pp")
+    }
+  });
+
   // document.getElementById("alphaSlide").addEventListener('mouseup', function() {
   //   g_selectedAlpha = this.value/100; 
   //   g_selectedColor[3] = g_selectedAlpha;
@@ -193,6 +222,7 @@ function main() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  jester = new Jester();
   renderScene();
 }
 
@@ -275,10 +305,14 @@ function renderScene(){
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 
-  let M = new Matrix4();
+  //let M = new Matrix4();
   
-  let i = new Jester();
-  i.render();
+  //let jester = new Jester();
+  
+  //jester.rotateAppendage("head", 45/36, 0, 0, 1);
+
+  jester.render();
+  
   // // drawCube([1, 0.7, 0.2, 1], M);
 
   // let p1 = new Prism(3);

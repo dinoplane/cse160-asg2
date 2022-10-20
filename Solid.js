@@ -1,5 +1,5 @@
 class Solid {
-    constructor() {
+    constructor(type_='', color_=[1.0, 1.0, 1.0,1.0], matrix_=new Matrix4()) {
       if (this.constructor == Solid) {
         throw new Error("Abstract classes can't be instantiated.");
       }
@@ -8,9 +8,17 @@ class Solid {
         console.log('Failed to create the buffer object');
         return -1;
       }
+      this.type = type_;
+      this.color = color_;
+      this.matrix = matrix_;
 
-      this.triangles = [];
-      
+
+      this.reset();
+    }
+
+    reset(){
+        this.triangles = [];
+        this.tricolors = [];
     }
   
     setMatrix(matrix_){
@@ -38,7 +46,20 @@ class Solid {
     }
 
     pushTriangle3D(vertices){
-        this.triangles.push(...vertices);
+        this.triangles.push(new Float32Array(vertices));
+    }
+
+    render(){
+        // console.log("color length", this.tricolors.length);
+        // console.log("trian length", this.triangles.length);
+
+        console.assert(this.tricolors.length == this.triangles.length, this.type,
+                        this.tricolors.length, "colors and", this.triangles.length, "triangles...")
+        gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements)
+        for (let i = 0; i < this.triangles.length; i++){
+            gl.uniform4f(u_FragColor, this.tricolors[i][0], this.tricolors[i][1], this.tricolors[i][2], this.tricolors[i][3]);
+            this.drawTriangle3D(this.triangles[i]);
+        }
     }
 
     drawTriangle3D(vertices) {
