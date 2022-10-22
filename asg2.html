@@ -9,25 +9,162 @@
   <body onload="main()">
     <div id="drawcanvas" style="position: absolute; left: 20; top: 20;">
       
-      <canvas id="webgl" width="800" height="800"
+      <canvas id="webgl" width="600" height="600"
       style="position: absolute; left: 0; top: 0;">
       Please use a browser that supports "canvas"
       </canvas>
     </div>
     
-    <div id="anglePanel" style="position: absolute; left: 820px; top: 20;">
+    <div id="anglePanel" style="position: absolute; left: 620px; top: 20;">
       <table>
         <tr>
           <th>Upper Chest</th>
-          <th>Upper Head</th>
+          <th>Pelvis</th>
+          <th>Animation</th>
+         
           
         </tr>
         <tr>
-          <td>Upper Chest</td>
-          <td>Upper Head</td>
+          <td>
+            Upper Chest XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="uchestXSlide"> <br><br>
+            Upper Chest YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="uchestYSlide"> <br><br>
+            Upper Chest ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="uchestZSlide">
+          </td>
+
+          <td> 
+           Pelvis XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="pelvisXSlide"> <br><br>
+           Pelvis YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="pelvisYSlide"> <br><br>
+           Pelvis ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="pelvisZSlide">
+          </td>
+          
           
         </tr>
+
+        <tr>
+          <th>Upper Appendages</th>
+          <th>Thighs</th>
+          <th>Pelvis</th>
+        </tr>
+
+        <tr>
+          <td>
+            <table>
+              <tr>
+                <th>Appendage</th><th>Right</th> <th>Left</th>
+              </tr>
+              <tr>
+                <td>Upper Arms</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="ruparmXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="ruparmYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="ruparmZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="luparmXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="luparmYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="luparmZSlide"></td>
+              </tr>
+              
+              <tr>
+                <td>Elbows</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="relbowXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="relbowYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="relbowZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lelbowXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lelbowYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lelbowZSlide"></td>
+              </tr>
+
+              <tr>
+                <td>Forearms</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfoarmXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfoarmYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfoarmZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfoarmXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfoarmYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfoarmZSlide"></td>
+              </tr>
+
+              <tr>
+                <td>Hands</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rhandXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rhandYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rhandZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lhandXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lhandYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lhandZSlide"></td>
+              </tr>
+            </table>
+            
+
+  
+
+          </td>
+          <td>
+            <table>
+              <tr>
+                <th>Appendage</th><th>Right</th> <th>Left</th>
+              </tr>
+              <tr>
+                <td>Thighs</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rthighXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rthighYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rthighZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lthighXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lthighYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lthighZSlide"></td>
+              </tr>
+              
+              <tr>
+                <td>Knees</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rkneeXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rkneeYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rkneeZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lkneeXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lkneeYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lkneeZSlide"></td>
+              </tr>
+
+              <tr>
+                <td>Calves</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rcalfXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rcalfYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rcalfZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lcalfXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lcalfYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lcalfZSlide"></td>
+              </tr>
+
+              <tr>
+                <td>Feet</td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfootXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfootYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="rfootZSlide"> </td>
+                <td>
+                   XAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfootXSlide"> <br><br>
+                   YAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfootYSlide"> <br><br>
+                   ZAngle<input type="range" min="-45" max="45" value="0" class="slider" id="lfootZSlide"></td>
+              </tr>
+            </table>
+            
+
+          </td>
+        </tr>
+
       </table>
+
 
       Torso angle <input type="range" min="-45" max="45" value="0" class="slider" id="pelvisSlide">
       
@@ -37,7 +174,7 @@
 
     </div>
     
-    <div id="" style="position: absolute; left: 20; top: 800px;">
+    <div id="" style="position: absolute; left: 20; top: 600px;">
       <p id="numdot">XXX</p> 
       <!-- <p>
         <button type="button" id="green">Green</button>

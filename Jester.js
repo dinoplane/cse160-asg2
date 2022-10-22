@@ -128,9 +128,9 @@ class Jester {
         for(let n in this.body){
             this.rotations[n] = {
                                 isRotated: false,
-                                "x": 0, 
-                                "y": 0,
-                                "z": 0,
+                                "X": 0, 
+                                "Y": 0,
+                                "Z": 0,
                             }
         }
 
@@ -147,10 +147,9 @@ class Jester {
 
     checkRotation(part, matrix){
         if (this.rotations[part].isRotated){
-            console.log("Meow", this.rotations[part]["z"]);
-            matrix.rotate(this.rotations[part]["x"], 1, 0, 0);
-            matrix.rotate(this.rotations[part]["y"], 0, 1, 0);
-            matrix.rotate(this.rotations[part]["z"], 0, 0, 1);    
+            matrix.rotate(this.rotations[part]["X"], 1, 0, 0);
+            matrix.rotate(this.rotations[part]["Y"], 0, 1, 0);
+            matrix.rotate(this.rotations[part]["Z"], 0, 0, 1);    
         }
     }
 
@@ -295,7 +294,7 @@ class Jester {
 
         // Right Upperarm
         this.checkRotation("ruparm", M_ruparm);
-        M_ruparm.translate(-0.5, 0.1, 0);
+        M_ruparm.translate(-0.2, 0.1, 0);
         M_ruparm.rotate(-90, 0, 0, 1);
         let M_relbow = new Matrix4(M_ruparm);
 
@@ -342,7 +341,7 @@ class Jester {
 
         // Left Upperarm
         this.checkRotation("luparm", M_luparm);
-        M_luparm.translate(0.5, 0.1, 0);
+        M_luparm.translate(0.2, 0.1, 0);
         M_luparm.rotate(90, 0, 0, 1);
         let M_lelbow = new Matrix4(M_luparm);
 
@@ -413,7 +412,7 @@ class Jester {
     }
 
     rotateAppendage(part, angle, axis){
-        console.log(this.rotations)
+        console.log(part, axis)
         this.rotations[part][axis] = angle;
         this.rotations[part].isRotated = !( this.rotations[part]["x"] == 0 &&
                                             this.rotations[part]["y"] == 0 &&

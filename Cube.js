@@ -60,7 +60,7 @@ class Cube extends Solid{
 
 
 function drawCube(color=[1,1,1,1], matrix=new Matrix4()){
-    var cube = new Cube(color, matrix);
+    let cube = new Cube(color, matrix);
     //cube.setMatrix(matrix);
     cube.render();
     return cube;

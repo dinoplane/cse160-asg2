@@ -159,7 +159,7 @@ function addActionsForHtmlUI(){
   
   document.getElementById("pelvisSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
-      jester.rotateAppendage("pelvis", this.value, 'z');
+      jester.rotateAppendage("pelvis", this.value, 'Z');
       renderScene();
       //jester.render();
       //console.log("pp")
@@ -168,22 +168,38 @@ function addActionsForHtmlUI(){
 
   document.getElementById("uchestSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
-      jester.rotateAppendage("uchest", this.value, 'z');
+      jester.rotateAppendage("uchest", this.value, 'Z');
       renderScene();
-      //jester.render();
-      //console.log("pp")
     }
   });
 
   document.getElementById("headSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
-      jester.rotateAppendage("head", this.value, 'z');
+      jester.rotateAppendage("head", this.value, 'Z');
       renderScene();
-      //jester.render();
-      //console.log("pp")
     }
   });
 
+  let appendages = ["uparm", "elbow", "foarm", "hand", "thigh", "knee", "calf", "foot"];
+  let ax = ['X', 'Y', 'Z'];
+  appendages.forEach((a) => {
+    ax.forEach(x => {
+      let lname = 'l'+a;
+      let rname = 'r'+a;
+      document.getElementById(lname+x+"Slide").addEventListener('mousemove', function(ev) {
+        if (ev.buttons == 1){
+          jester.rotateAppendage(lname, this.value, x);
+          renderScene();
+        }
+      });
+      document.getElementById(rname+x+"Slide").addEventListener('mousemove', function(ev) {
+          if (ev.buttons == 1){
+            jester.rotateAppendage(rname, this.value, x);
+            renderScene();
+          }
+      });
+    });
+  })
   // document.getElementById("alphaSlide").addEventListener('mouseup', function() {
   //   g_selectedAlpha = this.value/100; 
   //   g_selectedColor[3] = g_selectedAlpha;
@@ -305,9 +321,15 @@ function renderScene(){
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 
-  //let M = new Matrix4();
-  
-  //let jester = new Jester();
+
+  const START=0.75;
+  const RAD=1;
+  for (let i = 0; i < 7; i++){
+    let M1 = new Matrix4();
+    M1.translate(-1.5, lerp(i, 0, 6, START, START-2*RAD), 0);
+    M1.scale(0.3, 0.3, 0.3);
+    drawCube([1,1,1,1], M1);
+  }
   
   //jester.rotateAppendage("head", 45/36, 0, 0, 1);
 
