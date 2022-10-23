@@ -1,5 +1,5 @@
 class Prism extends Solid{
-    constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
+    constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4(), noface_=false){
         super('prism', color_, matrix_);
         this.r = 1.0;
         this.numV = numV_
@@ -7,6 +7,7 @@ class Prism extends Solid{
         this.h = h_;
         this.topface = [];
         this.botface = [];
+        this.noface = noface_
         
         this.remesh(); // You really only need to compute the vertices once!
     }
@@ -74,8 +75,11 @@ class Prism extends Solid{
         for (let i = 0; i < this.numV; i++){
             
             rgba.forEach(function(item, index, array){
-                if (index < 3) 
-                    array[index] = lerp(i, 0, v, rgba[index]*0.7, rgba[index]);
+                if (index < 3){
+                    if (i % 2) array[index] *= 1.25;
+                    else array[index] *= 0.8;
+                }
+                    
             });
             this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);
 

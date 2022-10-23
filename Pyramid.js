@@ -1,5 +1,5 @@
 class Pyramid extends Solid{
-    constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
+    constructor( numV_=4, h_=1.0, color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4(), noface_=false){
         super('pyramid', color_, matrix_);
         this.r = 1.0;
         this.numV = numV_
@@ -7,6 +7,7 @@ class Pyramid extends Solid{
         this.h = h_;
         this.apex = [0, 0]
         this.botface = [];
+        this.noface = noface_;
         
         this.calculateVerts(); // You really only need to compute the vertices once!
     }
@@ -24,6 +25,7 @@ class Pyramid extends Solid{
 
     setHeight(h_){
         this.h = h_;
+        this.calculateVerts()
     }
 
     calculateVerts(){
@@ -47,7 +49,7 @@ class Pyramid extends Solid{
         // Draw lateral faces
         for (let i = 0; i < this.numV; i++){
             rgba.forEach(function(item, index, array){
-                array[index] = lerp(i, 0, v, rgba[index]*0.7, rgba[index]);
+                if (index < 3) array[index] = lerp(i, 0, v, rgba[index]*0.7, rgba[index]);
             })
             this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);
 
@@ -57,7 +59,7 @@ class Pyramid extends Solid{
         }
 
         rgba.forEach(function(item, index, array){
-            array[index] = 0.7*item;
+            if (index < 3) array[index] = 0.7*item;
         })
 
         this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);

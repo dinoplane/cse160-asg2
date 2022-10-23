@@ -166,12 +166,12 @@ function addActionsForHtmlUI(){
     }
   });
 
-  document.getElementById("uchestSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      jester.rotateAppendage("uchest", this.value, 'Z');
-      renderScene();
-    }
-  });
+  // document.getElementById("lchestSlide").addEventListener('mousemove', function(ev) {
+  //   if (ev.buttons == 1){
+  //     jester.rotateAppendage("lchest", this.value, 'Z');
+  //     renderScene();
+  //   }
+  // });
 
   document.getElementById("headSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
@@ -179,9 +179,36 @@ function addActionsForHtmlUI(){
       renderScene();
     }
   });
-
-  let appendages = ["uparm", "elbow", "foarm", "hand", "thigh", "knee", "calf", "foot"];
+  let appendages = ["uuparm", "elbow", "foarm", "hand", "thigh", "knee", "calf", "foot"];
   let ax = ['X', 'Y', 'Z'];
+
+  ax.forEach(x => {
+    document.getElementById("pelvis"+x+"Slide").addEventListener('mousemove', function(ev) {
+      if (ev.buttons == 1){
+        jester.rotateAppendage("pelvis", this.value, x);
+        renderScene();
+      }
+    });
+  });
+
+  ax.forEach(x => {
+    document.getElementById("lchest"+x+"Slide").addEventListener('mousemove', function(ev) {
+      if (ev.buttons == 1){
+        jester.rotateAppendage("lchest", this.value, x);
+        renderScene();
+      }
+    });
+  });
+
+  // ax.forEach(x => {
+  //   document.getElementById("head"+x+"Slide").addEventListener('mousemove', function(ev) {
+  //     if (ev.buttons == 1){
+  //       jester.rotateAppendage("head", this.value, x);
+  //       renderScene();
+  //     }
+  //   });
+  // });
+
   appendages.forEach((a) => {
     ax.forEach(x => {
       let lname = 'l'+a;
@@ -324,10 +351,11 @@ function renderScene(){
 
   const START=0.75;
   const RAD=1;
-  for (let i = 0; i < 7; i++){
+  const NUM_S = 5;
+  for (let i = 0; i < NUM_S; i++){
     let M1 = new Matrix4();
-    M1.translate(-1.5, lerp(i, 0, 6, START, START-2*RAD), 0);
-    M1.scale(0.3, 0.3, 0.3);
+    M1.translate(-1.5, lerp(i, 0, NUM_S-1, START, START-2*RAD), 0);
+    M1.scale(0.45, 0.45, 0.45);
     drawCube([1,1,1,1], M1);
   }
   

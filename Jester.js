@@ -1,3 +1,5 @@
+
+
 class Jester {
     constructor(){
   
@@ -9,31 +11,64 @@ class Jester {
     createBody(){
         this.body = {}
         this.rotations = {};
-        this.body["abdomen"] = new Pyramid(10, 1,[1, 0, 1, 1]);
+        this.body["abdomen"] = new Icosahedron([1, 0.5, 0.8, 1], new Matrix4(), true);
         console.log(this.rotations);
         console.log(this.body["abdomen"]);
 
 
-        this.body["pelvis"] = new Prism(10, 1.0, [1, 0, 1, 1]);
+        this.body["pelvis"] = new Prism(10, 1.0, [1, 0.5, 0.8, 1]);
         this.body["pelvis"].setMaxWidth(1);
-        this.body["pelvis"].scaleFace("b", 2);
-        this.body["pelvis"].setHeight(1.7); // YEEE
+        this.body["pelvis"].scaleFace("b", 1.4);
+        this.body["pelvis"].scaleFace("t", 0.8);
         
+        this.body["pelvis"].setHeight(0.6); // YEEE
 
-        this.body["uchest"] = new Prism(10, 1.0, [1, 0, 1, 1]);
+        this.body["lpelvis"] = new Pyramid(10, 0.6, [1, 0.5, 0.8, 1]);
+        this.body["lpelvis"].setMaxWidth(1.12);
+        //this.body["lpelvis"].scaleFace("b", 1.4);
+        //this.body["lpelvis"].scaleFace(2);
+        this.body["lpelvis"].setHeight(0.4); // YEEE
+        
+        
+        this.body["lchest"] = new Prism(10, 0.25, [1, 0.5, 0.8, 1]);
+        this.body["lchest"].setMaxWidth(1);
+        this.body["lchest"].scaleFace("t", 1.0);
+        this.body["lchest"].scaleFace("b", 0.6);
+
+        this.body["uchest"] = new Prism(10, 0.7, [1, 0.5, 0.8, 1]);
         this.body["uchest"].setMaxWidth(1);
-        this.body["uchest"].scaleFace("b", 1.3);
-        this.body["uchest"].scaleFace("t", 0.8);
+        this.body["uchest"].scaleFace("t", 0.6);
+        this.body["uchest"].scaleFace("b", 1.0);
+
+        this.body["rshoulder"] = new Icosahedron([1, 0.5, 0.8, 1]);
+        this.body["lshoulder"] = new Icosahedron([1, 0.5, 0.8, 1]);
+
+        this.body["ruuparm"] = new Prism(10, 0.5, [1, 0, 0, 1]);
+        this.body["ruuparm"].setMaxWidth(1);
+        this.body["ruuparm"].scaleFace("t", 0.4);
+        this.body["ruuparm"].scaleFace("b", 0.6);
+
+        this.body["luuparm"] = new Prism(10, 0.5, [1, 0, 0, 1]);
+        this.body["luuparm"].setMaxWidth(1);
+        this.body["luuparm"].scaleFace("t", 0.4);
+        this.body["luuparm"].scaleFace("b", 0.6);
         //p5.setHeight();
         //p5.render();      
 
+        // Neck
+        this.body["neck"] = new Cube([1, 0.5, 0.8, 1]);
+
         // Head
 
-        this.body["head"] = new Cube([1, 0, 1, 1]);
+        this.body["head"] = new Cube([1, 1, 1, 1]);
     
-        // Right Leg joint
 
         // Legs
+
+        // Thigh Joints
+        this.body["rtjoint"] = new Icosahedron([1,0,1,1], new Matrix4(), true);
+        this.body["ltjoint"] = new Icosahedron([1,0,1,1], new Matrix4(), true);
+        
 
         // Thighs
         const THIGH_LENGTH = 0.7
@@ -52,25 +87,25 @@ class Jester {
         this.body["lknee"] = new Icosahedron([1, 1, 1, 1], new Matrix4(), true);
 
         // Calves
-        this.body["rcalf"] = new Prism(10, 0.8, [1, 1, 0, 1]);
+        this.body["rcalf"] = new Prism(10, 0.8, [1, 1, 1, 1]);
         this.body["rcalf"].setMaxWidth(1);
         this.body["rcalf"].scaleFace("t", 0.4);
         this.body["rcalf"].scaleFace("b", 0.25);
-        this.body["lcalf"] = new Prism(10, 0.8, [1, 1, 0, 1]);
+        this.body["lcalf"] = new Prism(10, 0.8, [1, 1, 1, 1]);
         this.body["lcalf"].setMaxWidth(1);
         this.body["lcalf"].scaleFace("t", 0.4);
         this.body["lcalf"].scaleFace("b", 0.25);
     
         // Foot Joint
-        this.body["rfjoint"] = new Prism(10, 0.2, [1, 0, 0, 1]);
+        this.body["rfjoint"] = new Prism(10, 0.2, [1, 1, 1, 1]);
         this.body["rfjoint"].setMaxWidth(0.2);
-        this.body["lfjoint"] = new Prism(10, 0.2, [1, 0, 0, 1]);
+        this.body["lfjoint"] = new Prism(10, 0.2, [1, 1, 1, 1]);
         this.body["lfjoint"].setMaxWidth(0.2);
 
         // Feet
-        this.body["rfoot"] = new Prism(4, 0.2, [0.5, 0.5, 0.5, 1]);
+        this.body["rfoot"] = new Prism(4, 0.2, [0.5, 0, 0, 1]);
         this.body["rfoot"].setMaxWidth(1);
-        this.body["lfoot"] = new Prism(4, 0.2, [0.5, 0.5, 0.5, 1]);
+        this.body["lfoot"] = new Prism(4, 0.2, [0.5, 0, 0, 1]);
         this.body["lfoot"].setMaxWidth(1);
 
         // Arms
@@ -84,30 +119,30 @@ class Jester {
         this.body["luparm"].scaleFace("t", 0.3);
         this.body["luparm"].scaleFace("b", 0.25);
 
-        // // Elbows
+        // Elbows
         this.body["relbow"] = new Icosahedron([1, 1, 1, 1], new Matrix4(), true);
         this.body["lelbow"] = new Icosahedron([1, 1, 1, 1], new Matrix4(), true);
 
-        // // Calves
-        this.body["rfoarm"] = new Prism(10, 0.5, [1, 1, 0, 1]);
+        // ForeArms
+        this.body["rfoarm"] = new Prism(10, 0.5, [1, 1, 1, 1]);
         this.body["rfoarm"].setMaxWidth(1);
         this.body["rfoarm"].scaleFace("t", 0.25);
         this.body["rfoarm"].scaleFace("b", 0.2);
-        this.body["lfoarm"] = new Prism(10, 0.5, [1, 1, 0, 1]);
+        this.body["lfoarm"] = new Prism(10, 0.5, [1, 1, 1, 1]);
         this.body["lfoarm"].setMaxWidth(1);
         this.body["lfoarm"].scaleFace("t", 0.25);
         this.body["lfoarm"].scaleFace("b", 0.2);
     
-        // // Foot Joint
-        this.body["rwrist"] = new Prism(10, 0.2, [1, 0, 0, 1]);
+        // Wrists
+        this.body["rwrist"] = new Prism(10, 0.2, [1, 1, 1, 1]);
         this.body["rwrist"].setMaxWidth(0.2);
-        this.body["lwrist"] = new Prism(10, 0.2, [1, 0, 0, 1]);
+        this.body["lwrist"] = new Prism(10, 0.2, [1, 1, 1, 1]);
         this.body["lwrist"].setMaxWidth(0.2);
 
-        // // Feet
-        this.body["rhand"] = new Prism(4, 0.2, [0.5, 0.5, 0.5, 1]);
+        // Feet
+        this.body["rhand"] = new Prism(4, 0.2, [1, 0, 0, 1]);
         this.body["rhand"].setMaxWidth(1);
-        this.body["lhand"] = new Prism(4, 0.2, [0.5, 0.5, 0.5, 1]);
+        this.body["lhand"] = new Prism(4, 0.2, [1, 0, 0, 1]);
         this.body["lhand"].setMaxWidth(1);
 
 
@@ -158,11 +193,13 @@ class Jester {
         let M_abdomen = new Matrix4();
 
         this.checkRotation("abdomen", M_abdomen);
+        M_abdomen.translate(0, -0.1, 0);
         let M_pelvis = new Matrix4(M_abdomen);
-        let M_uchest = new Matrix4(M_abdomen);
+        let M_lchest = new Matrix4(M_abdomen);
 
-        M_abdomen.translate(0, -0.15, 0);
-        M_abdomen.scale(0.3, -0.3, 0.3);
+
+
+        M_abdomen.scale(0.3, 0.3, 0.3);
         
         this.body["abdomen"].matrix = M_abdomen;
 
@@ -170,17 +207,29 @@ class Jester {
 
         // Pelvis
         this.checkRotation("pelvis", M_pelvis);
-        M_pelvis.translate(0, -0.5, 0);
-        let M_rthigh = new Matrix4(M_pelvis);
-        let M_lthigh = new Matrix4(M_pelvis);
+        M_pelvis.translate(0, -0.2, 0);
+        
+        //let M_lthigh = new Matrix4(M_pelvis);
+        let M_lpelvis = new Matrix4(M_pelvis);
+        let M_rtjoint = new Matrix4(M_pelvis);
+        let M_ltjoint = new Matrix4(M_pelvis);
 
-        M_pelvis.scale(0.5, 0.5, 0.5);
+        M_pelvis.scale(0.4, 0.4, 0.3);
         this.body["pelvis"].matrix = M_pelvis;
 
+        M_lpelvis.translate(0, -0.22, 0);
+        M_lpelvis.scale(0.5, -0.5, 0.37);
+        this.body["lpelvis"].matrix = M_lpelvis;
+
+        //Right Thigh Joint
+        M_rtjoint.translate(-0.13, -0.13, 0);
+        let M_rthigh = new Matrix4(M_rtjoint);
+        M_rtjoint.scale(0.15, 0.15, 0.15);
+        this.body["rtjoint"].matrix = M_rtjoint;
 
         // Right thigh
         this.checkRotation("rthigh", M_rthigh);
-        M_rthigh.translate(-0.15, -0.05, 0);
+        M_rthigh.translate(0, -0.2, 0);
         let M_rknee = new Matrix4(M_rthigh);
 
         M_rthigh.scale(0.5, 0.7, 0.5);
@@ -221,10 +270,15 @@ class Jester {
         M_rfoot.scale(0.2, 0.3, 0.25);
         this.body["rfoot"].matrix = M_rfoot;
 
+        // Left Thigh Joint 
+        M_ltjoint.translate(0.13, -0.13, 0);
+        let M_lthigh = new Matrix4(M_ltjoint);
+        M_ltjoint.scale(0.15, 0.15, 0.15);
+        this.body["ltjoint"].matrix = M_ltjoint;
 
         // Left Thigh
         this.checkRotation("lthigh", M_lthigh);
-        M_lthigh.translate(0.15, -0.05, 0);
+        M_lthigh.translate(0,-0.2, 0);
         let M_lknee= new Matrix4(M_lthigh);
 
         M_lthigh.scale(0.5, 0.7, 0.5);
@@ -277,25 +331,47 @@ class Jester {
         
         // M_lchest.scale(0.5, -0.5, 0.5);
         // this.body.push(M_lchest);
-        //let  = new Pyramid(10, 1.0, [1, 0, 1, 1], M_lchest);
+        //let  = new Pyramid(10, 1.0, [1, 0.5, 0.8, 1], M_lchest);
         // p4.setMaxWidth(1);
         // p4.scaleFace(1.2);
         // //p4.render();
 
         // Chest
-        this.checkRotation("uchest", M_uchest);
-        M_uchest.translate(0, 0.2, 0);
-        let M_head = new Matrix4(M_uchest);
-        let M_ruparm = new Matrix4(M_uchest);
-        let M_luparm = new Matrix4(M_uchest);
         
-        M_uchest.scale(0.5, 0.4, 0.5);
+
+        this.checkRotation("lchest", M_lchest);
+        M_lchest.translate(0, 0.1, 0);
+        let M_uchest = new Matrix4(M_lchest);
+        M_lchest.scale(0.5, 0.5, 0.5);
+        this.body["lchest"].matrix = M_lchest;
+
+        M_uchest.translate(0, 0.23, 0);
+        let M_neck = new Matrix4(M_uchest);
+        let M_rshoulder = new Matrix4(M_uchest);
+        let M_lshoulder = new Matrix4(M_uchest);
+        
+        M_uchest.scale(0.5, 0.5, 0.5);
         this.body["uchest"].matrix = M_uchest;
+
+        this.checkRotation("rshoulder", M_rshoulder);
+        M_rshoulder.translate(-0.18, 0.07, 0);
+        let M_ruuparm = new Matrix4(M_rshoulder);
+        M_rshoulder.scale(0.1, 0.1, 0.1);
+        this.body["rshoulder"].matrix = M_rshoulder;
+
+        // Right Upperupper arm
+        this.checkRotation("ruuparm", M_ruuparm);
+        M_ruuparm.rotate(-90, 0, 0, 1);
+        M_ruuparm.translate(-0.0, -0.05, 0);
+        
+        let M_ruparm = new Matrix4(M_ruuparm);
+        M_ruuparm.scale(0.3, 0.3, 0.3);
+        this.body["ruuparm"].matrix = M_ruuparm;
 
         // Right Upperarm
         this.checkRotation("ruparm", M_ruparm);
-        M_ruparm.translate(-0.2, 0.1, 0);
-        M_ruparm.rotate(-90, 0, 0, 1);
+        M_ruparm.translate(-0.0, -0.2, 0);
+
         let M_relbow = new Matrix4(M_ruparm);
 
         M_ruparm.scale(0.5, 0.8, 0.5);
@@ -337,18 +413,32 @@ class Jester {
         M_rhand.scale(0.2, 0.3, 0.25);
         this.body["rhand"].matrix = M_rhand;
 
+        //Left Shoulder
+        this.checkRotation("lshoulder", M_lshoulder);
+        M_lshoulder.translate(0.18, 0.07, 0);
+        let M_luuparm = new Matrix4(M_lshoulder);
+        M_lshoulder.scale(0.1, 0.1, 0.1);
+        this.body["lshoulder"].matrix = M_lshoulder;
 
+        // Right Upperupper arm
+        this.checkRotation("luuparm", M_luuparm);
+        M_luuparm.rotate(90, 0, 0, 1);
+        M_luuparm.translate(-0.0, -0.05, 0);
+        
+        let M_luparm = new Matrix4(M_luuparm);
+        M_luuparm.scale(0.3, 0.3, 0.3);
+        this.body["luuparm"].matrix = M_luuparm;
 
-        // Left Upperarm
+        // Right Upperarm
         this.checkRotation("luparm", M_luparm);
-        M_luparm.translate(0.2, 0.1, 0);
-        M_luparm.rotate(90, 0, 0, 1);
+        M_luparm.translate(0.0, -0.2, 0);
+
         let M_lelbow = new Matrix4(M_luparm);
 
         M_luparm.scale(0.5, 0.8, 0.5);
         this.body["luparm"].matrix = M_luparm;
 
-        // Right Elbow
+        //Left Elbow
         this.checkRotation("lelbow", M_lelbow);
         M_lelbow.translate(0, -0.23, 0);
         let M_lfoarm = new Matrix4(M_lelbow);
@@ -357,7 +447,7 @@ class Jester {
         this.body["lelbow"].matrix = M_lelbow;
 
 
-        // Right Forearm
+        // Left Forearm
         this.checkRotation("lfoarm", M_lfoarm);
         M_lfoarm.translate(0, -0.15, 0);
         let M_lwrist = new Matrix4(M_lfoarm);
@@ -365,7 +455,7 @@ class Jester {
         M_lfoarm.scale(0.4, 0.5, 0.4);
         this.body["lfoarm"].matrix = M_lfoarm;
 
-        // Right Wrist
+        // Left Wrist
         this.checkRotation("lwrist", M_lwrist);        
         M_lwrist.translate(0, -0.15, 0);
         M_lwrist.rotate(-90, 0, 0, 1);
@@ -374,7 +464,7 @@ class Jester {
         M_lwrist.scale(0.4, 0.4, 0.4);
         this.body["lwrist"].matrix = M_lwrist;
 
-        // Right Hand
+        // Left Hand
         this.checkRotation("lhand", M_lhand);     
         M_lhand.rotate(90, 0, 0, 1); 
         M_lhand.rotate(90, 1, 0, 0); 
@@ -383,10 +473,16 @@ class Jester {
         this.body["lhand"].matrix = M_lhand;
 
 
+        //Neck
+        M_neck.translate(0, 0.4, 0.0);
+        let M_head = new Matrix4(M_neck);
+        M_neck.scale(0,0,0)
+        this.body["neck"].matrix = M_neck;
+
         // Head
         this.checkRotation("head", M_head);
-        M_head.translate(0, 0.4, 0);
-        M_head.scale(0.3, 0.3, 0.3);
+        M_head.translate(0, 0.1, 0);
+        M_head.scale(0.4, 0.4, 0.4);
         this.body["head"].matrix = M_head;
 
         // Right Leg joint
