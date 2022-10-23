@@ -180,13 +180,7 @@ class Jester {
 
     }
 
-    checkRotation(part, matrix){
-        if (this.rotations[part].isRotated){
-            matrix.rotate(this.rotations[part]["X"], 1, 0, 0);
-            matrix.rotate(this.rotations[part]["Y"], 0, 1, 0);
-            matrix.rotate(this.rotations[part]["Z"], 0, 0, 1);    
-        }
-    }
+
 
     transformBody(){
         // Abdomen
@@ -420,16 +414,18 @@ class Jester {
         M_lshoulder.scale(0.1, 0.1, 0.1);
         this.body["lshoulder"].matrix = M_lshoulder;
 
-        // Right Upperupper arm
+        // Left Upperupper arm
         this.checkRotation("luuparm", M_luuparm);
         M_luuparm.rotate(90, 0, 0, 1);
+        //M_luuparm.scale(-1, 1, 1);
+        
         M_luuparm.translate(-0.0, -0.05, 0);
         
         let M_luparm = new Matrix4(M_luuparm);
         M_luuparm.scale(0.3, 0.3, 0.3);
         this.body["luuparm"].matrix = M_luuparm;
 
-        // Right Upperarm
+        // Left Upperarm
         this.checkRotation("luparm", M_luparm);
         M_luparm.translate(0.0, -0.2, 0);
 
@@ -481,7 +477,7 @@ class Jester {
 
         // Head
         this.checkRotation("head", M_head);
-        M_head.translate(0, 0.1, 0);
+        M_head.translate(0, 0.03, 0);
         M_head.scale(0.4, 0.4, 0.4);
         this.body["head"].matrix = M_head;
 
@@ -507,21 +503,43 @@ class Jester {
 
     }
 
-    rotateAppendage(part, angle, axis){
-        console.log(part, axis)
-        this.rotations[part][axis] = angle;
-        this.rotations[part].isRotated = !( this.rotations[part]["x"] == 0 &&
-                                            this.rotations[part]["y"] == 0 &&
-                                            this.rotations[part]["z"] == 0 );
+    checkRotation(part, matrix, inverse=false){
+        if (this.rotations[part].isRotated){
+            let m = (inverse) ? -1: 1;
+            matrix.rotate(this.rotations[part]["X"]*m, 1, 0, 0);
+            matrix.rotate(this.rotations[part]["Y"]*m, 0, 1, 0);
+            matrix.rotate(this.rotations[part]["Z"]*m, 0, 0, 1);    
+        }
+    }
+
+    rotateAppendage(part, angle, axis, inverse=false){
+        
+        this.setRotation(part, angle, axis, (inverse) ? -1: 1);
         this.transformBody();
     }
 
+    setRotation(part, angle, axis, m){
+        this.rotations[part][axis] = m*angle;
+        this.rotations[part].isRotated = !( this.rotations[part]["x"] == 0 &&
+                                            this.rotations[part]["y"] == 0 &&
+                                            this.rotations[part]["z"] == 0 );
+    }
+
     render(){
-        console.log(this.body)
         for (let part in this.body){
             this.body[part].render();
         }
     }
 
+    idleStart(){
+        
+    }
 
+    idleAnimation(seconds){
+
+    }
+
+    walkAnimation(seconds){
+        
+    }
 }

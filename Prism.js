@@ -72,14 +72,12 @@ class Prism extends Solid{
         
         // Draw lateral faces
 
-        for (let i = 0; i < this.numV; i++){
-            
+        for (let i = 0; i < this.numV; i++){            
             rgba.forEach(function(item, index, array){
                 if (index < 3){
                     if (i % 2) array[index] *= 1.25;
                     else array[index] *= 0.8;
                 }
-                    
             });
             this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);
 

@@ -104,50 +104,29 @@ let g_selectedSize = 5.0;
 let g_selectedSegs = 10;
 
 function addActionsForHtmlUI(){
-  // Button events
-  // document.getElementById('green').onclick = function() { 
-  //   g_selectedColor = [0.0, 1.0, 0.0, g_selectedAlpha]; 
-  //   updateSliders();
-  // };
-  // document.getElementById('red').onclick = function() {
-  //   g_selectedColor = [1.0, 0.0, 0.0, g_selectedAlpha]; 
-  //   updateSliders(); 
-  // };
-  // document.getElementById('clear').onclick = function() { 
-  //     g_shapesList = []; 
-  //     renderScene();
-  //   };
+  // document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
+  //   if (ev.buttons == 1){
+  //     g_globalXAngle = this.value; 
+  //     renderScene(); 
+  //     //console.log("pp")
+  //   }
+  // });
 
+  // document.getElementById("yangleSlide").addEventListener('mousemove', function(ev) {
+  //   if (ev.buttons == 1){
+  //     g_globalYAngle = this.value; 
+  //     renderScene(); 
+  //     //console.log("pp")
+  //   }
+  // });
 
-  // document.getElementById('pointButton').onclick = function() { g_selectedType = POINT; }
-  // document.getElementById('triButton').onclick = function() { g_selectedType = TRIANGLE; }
-  // document.getElementById('cirButton').onclick = function() { g_selectedType = CIRCLE; }
-
-  
-
-  document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      g_globalXAngle = this.value; 
-      renderScene(); 
-      //console.log("pp")
-    }
-  });
-
-  document.getElementById("yangleSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      g_globalYAngle = this.value; 
-      renderScene(); 
-      //console.log("pp")
-    }
-  });
-
-  document.getElementById("zangleSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      g_globalZAngle = this.value; 
-      renderScene(); 
-      //console.log("pp")
-    }
-  });
+  // document.getElementById("zangleSlide").addEventListener('mousemove', function(ev) {
+  //   if (ev.buttons == 1){
+  //     g_globalZAngle = this.value; 
+  //     renderScene(); 
+  //     //console.log("pp")
+  //   }
+  // });
 
   document.getElementById("zoomSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
@@ -176,28 +155,32 @@ function addActionsForHtmlUI(){
   document.getElementById("headSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
       jester.rotateAppendage("head", this.value, 'Z');
-      renderScene();
+      //renderScene();
     }
   });
-  let appendages = ["uuparm", "elbow", "foarm", "hand", "thigh", "knee", "calf", "foot"];
+  let appendages = ["uuparm",  "foarm", "hand", "thigh",  "calf", "foot"];
   let ax = ['X', 'Y', 'Z'];
 
   ax.forEach(x => {
-    document.getElementById("pelvis"+x+"Slide").addEventListener('mousemove', function(ev) {
-      if (ev.buttons == 1){
-        jester.rotateAppendage("pelvis", this.value, x);
-        renderScene();
-      }
-    });
+    let element = document.getElementById("pelvis"+x+"Slide");
+    if (element != null)
+      element.addEventListener('mousemove', function(ev) {
+        if (ev.buttons == 1){
+          jester.rotateAppendage("pelvis", this.value, x);
+          //renderScene();
+        }
+      });
   });
 
   ax.forEach(x => {
-    document.getElementById("lchest"+x+"Slide").addEventListener('mousemove', function(ev) {
-      if (ev.buttons == 1){
-        jester.rotateAppendage("lchest", this.value, x);
-        renderScene();
-      }
-    });
+    let element = document.getElementById("lchest"+x+"Slide");
+    if (element != null)
+      element.addEventListener('mousemove', function(ev) {
+        if (ev.buttons == 1){
+          jester.rotateAppendage("lchest", this.value, x);
+          //renderScene();
+        }
+      });
   });
 
   // ax.forEach(x => {
@@ -213,18 +196,25 @@ function addActionsForHtmlUI(){
     ax.forEach(x => {
       let lname = 'l'+a;
       let rname = 'r'+a;
-      document.getElementById(lname+x+"Slide").addEventListener('mousemove', function(ev) {
-        if (ev.buttons == 1){
-          jester.rotateAppendage(lname, this.value, x);
-          renderScene();
-        }
-      });
-      document.getElementById(rname+x+"Slide").addEventListener('mousemove', function(ev) {
+      let element = document.getElementById(lname+x+"Slide")
+      if (element != null)
+        element.addEventListener('mousemove', function(ev) {
           if (ev.buttons == 1){
-            jester.rotateAppendage(rname, this.value, x);
-            renderScene();
+            jester.rotateAppendage(lname, this.value, x);
+            //renderScene();
           }
-      });
+        });
+      element = document.getElementById(rname+x+"Slide");
+      if (element != null)
+        element.addEventListener('mousemove', function(ev) {
+            if (ev.buttons == 1){
+              if (x != 'X') 
+                jester.rotateAppendage(rname, -this.value, x);
+              else 
+                jester.rotateAppendage(rname, this.value, x);
+              //renderScene();
+            }
+        });
     });
   })
   // document.getElementById("alphaSlide").addEventListener('mouseup', function() {
@@ -249,9 +239,9 @@ function main() {
   addActionsForHtmlUI(); 
 
   // Register function (event handler) to be called on a mouse press
-  // canvas.onmousedown = click;
+  canvas.onmousedown = click;
 
-  // canvas.onmousemove = function(ev) { if (ev.buttons == 1 && !houseMode && !susMode) click(ev); };
+  canvas.onmousemove = function(ev) { if (ev.buttons == 1) drag(ev); };
     
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -266,7 +256,7 @@ function main() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   jester = new Jester();
-  renderScene();
+  requestAnimationFrame(tick);
 }
 
 
@@ -282,14 +272,22 @@ function convertToCoordinatesEventToGL(ev){
 }
 
 // var g_shapesList = [];
-  
+let px = 0;
+let py = 0;
 
-function click(ev) {
+function click(ev){
+  [px, py] = convertToCoordinatesEventToGL(ev);
+}
+
+function drag(ev) {
   let [x, y] = convertToCoordinatesEventToGL(ev);
+  console.log(x, y);
+  let dy = y-py;
+  let dx = px-x;
 
-    addPoint(x, y);
+  g_globalXAngle +=dy;
+  g_globalYAngle +=dx;
 
-  renderScene();
 }
 
 function randomizeColor(i, j){
@@ -362,86 +360,19 @@ function renderScene(){
   //jester.rotateAppendage("head", 45/36, 0, 0, 1);
 
   jester.render();
-  
-  // // drawCube([1, 0.7, 0.2, 1], M);
-
-  // let p1 = new Prism(3);
-  // p1.setSideLength(1);
-  // //p1.render();
-
-  // let p2 = new Prism(4, 1, [1, 0.1, 1, 1]);
-  // p2.translate(0.2, 0, 0);
-  
-  // p2.rotate(70, 0, 0, 1);
-  
-  // p2.setSideLength(0.5);
-  // p2.render();
-
-  // let M_torso = new Matrix4();
-
-  
-  // //let M_torso = new Matrix4();
-  // M_torso.translate(0, -0.4, 0);
-
-  // let M_lchest = new Matrix4(M_torso);
-
-  // M_torso.scale(0.5, 0.5, 0.5);
-  // let p3 = new Prism(10, 1.0, [1, 0, 1, 1], M_torso);
-  // p3.setMaxWidth(1);
-  // p3.scaleFace("b", 2);
-  // //p3.setHeight(1.7);
-  // p3.render();
-
-
-  // M_lchest.translate(0, 0.4, 0);
-  // //M_lchest.rotate(45, 0, 0, 1);
-
-  // let M_uchest = new Matrix4(M_lchest);
-
-  // M_lchest.scale(0.5, -0.5, 0.5);
-  // let p4 = new Pyramid(10, 1.0, [1, 0, 1, 1], M_lchest);
-  // p4.setMaxWidth(1);
-  // p4.scaleFace(1.2);
-  // p4.render();
-  
-
-  // M_uchest.translate(0, 0.45, 0);
-
-  // M_uchest.scale(0.5, 0.4, 0.5);
-  // let p5 = new Prism(10, 1.0, [1, 0, 1, 1], M_uchest);
-  // p5.setMaxWidth(1);
-  // p5.scaleFace("b", 1.2);
-  // p5.scaleFace("t", 0.5);
-  // //p5.setHeight();
-  // p5.render();
-  
-
-  //let p6 = new Prism(6);
-  // var len = g_shapesList.length;
-  // for(var i = 0; i < len; i++) {
-  //   g_shapesList[i].render();
-  // }
-  //this.drawTriangle3D([-1.0, 0.0, 0.0,     -0.5, -1.0, 0.0,    0.0, 0.0, -1.0]);
-  
-  // var body = new Cube([1.0, 0.0, 0.0, 1.0]);
-  // body.translate(-0.25, -0.1, 0.0);
-  // // body.scale(0.5, 0.5, 0.5);
-  // body.render();
-
-  // var left = new Cube([1,1,0,1]);
-  // left.scale(0.25, 0.25, 0.25);
-
-  // drawCube([1,0,1,1],left.matrix);
-  // left.rotate(45, 0, 0, 1);
-  // drawCube([0,1,0,1],left.matrix);
-  // left.translate(0.7, 0.7, 0.0);
-
-  // left.render();
 
   var duration = performance.now() - startTime;
   sendTextToHTML(
                 " ms: " + Math.floor(duration) + 
                 " fps: " + Math.floor(10000/duration), "numdot");
+}
+let g_startTime=performance.now()/1000.0;
+let g_seconds=performance.now()/1000.0-g_startTime;
+function tick(){
+  //console.log(performance.now());
+  g_seconds=performance.now()/1000.0-g_startTime;
+  renderScene();
+  requestAnimationFrame(tick);
 }
 
 function sendTextToHTML(text, htmlID){
