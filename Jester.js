@@ -5,16 +5,17 @@ class Jester {
   
         this.createBody();
         this.transformBody();
+        this.initAnimation();
 
     }
 
     createBody(){
         this.body = {}
         this.rotations = {};
-        this.body["abdomen"] = new Icosahedron([1, 0.5, 0.8, 1], new Matrix4(), true);
-        console.log(this.rotations);
-        console.log(this.body["abdomen"]);
+        this.translations = {};
+        this.scales = {};
 
+        this.body["abdomen"] = new Icosahedron([1, 0.5, 0.8, 1], new Matrix4(), true);
 
         this.body["pelvis"] = new Prism(10, 1.0, [1, 0.5, 0.8, 1]);
         this.body["pelvis"].setMaxWidth(1);
@@ -146,20 +147,6 @@ class Jester {
         this.body["lhand"].setMaxWidth(1);
 
 
-        // Upper Arms
-        // Elbows?
-        // Forarms
-        // Hands
-
-        
-        // Left Leg joint
-        // Left Thigh
-        // Left Calf
-        // Left Foot
-        console.log(this.rotations);
-        console.log(this.body);
-
-
         for(let n in this.body){
             this.rotations[n] = {
                                 isRotated: false,
@@ -167,37 +154,36 @@ class Jester {
                                 "Y": 0,
                                 "Z": 0,
                             }
+
+            this.translations[n] = {
+                isTranslated: false,
+                "X": 0, 
+                "Y": 0,
+                "Z": 0,
+            }
+
+            this.scales[n] = {
+                isScaled: false,
+                "X": 0, 
+                "Y": 0,
+                "Z": 0,
+            }
         }
-
-
-
-
-
-        // Right Arm joint
-        // 
-        // Left Arm joint
-
-
     }
-
-
 
     transformBody(){
         // Abdomen
         let M_abdomen = new Matrix4();
 
         this.checkRotation("abdomen", M_abdomen);
+        this.checkTranslation("abdomen", M_abdomen);
         M_abdomen.translate(0, -0.1, 0);
         let M_pelvis = new Matrix4(M_abdomen);
         let M_lchest = new Matrix4(M_abdomen);
 
-
-
         M_abdomen.scale(0.3, 0.3, 0.3);
         
         this.body["abdomen"].matrix = M_abdomen;
-
-        // let M_lchest = new Matrix4(M_pelvis);
 
         // Pelvis
         this.checkRotation("pelvis", M_pelvis);
@@ -391,7 +377,7 @@ class Jester {
         // Right Wrist
         this.checkRotation("rwrist", M_rwrist);        
         M_rwrist.translate(0, -0.15, 0);
-        M_rwrist.rotate(-90, 0, 0, 1);
+        M_rwrist.rotate(90, 0, 0, 1);
         let M_rhand = new Matrix4(M_rwrist);
 
         M_rwrist.scale(0.4, 0.4, 0.4);
@@ -399,12 +385,12 @@ class Jester {
 
         // Right Hand
         this.checkRotation("rhand", M_rhand);     
-        M_rhand.rotate(90, 0, 0, 1); 
-        M_rhand.rotate(90, 1, 0, 0); 
+        M_rhand.rotate(-90, 0, 0, 1); 
+        // M_rhand.rotate(90, 1, 0, 0); 
         
-        M_rhand.translate(0, 0, 0.1);
+        M_rhand.translate(0, -0.1, 0);
 
-        M_rhand.scale(0.2, 0.3, 0.25);
+        M_rhand.scale(0.05, 1.0, 0.25);
         this.body["rhand"].matrix = M_rhand;
 
         //Left Shoulder
@@ -463,9 +449,9 @@ class Jester {
         // Left Hand
         this.checkRotation("lhand", M_lhand);     
         M_lhand.rotate(90, 0, 0, 1); 
-        M_lhand.rotate(90, 1, 0, 0); 
-        M_lhand.translate(0, 0, 0.1);
-        M_lhand.scale(0.2, 0.3, 0.25);
+        //M_lhand.rotate(90, 1, 0, 0); 
+        M_lhand.translate(0, -0.1, 0.0);
+        M_lhand.scale(0.05, 1.0, 0.25);
         this.body["lhand"].matrix = M_lhand;
 
 
@@ -503,14 +489,6 @@ class Jester {
 
     }
 
-    checkRotation(part, matrix, inverse=false){
-        if (this.rotations[part].isRotated){
-            let m = (inverse) ? -1: 1;
-            matrix.rotate(this.rotations[part]["X"]*m, 1, 0, 0);
-            matrix.rotate(this.rotations[part]["Y"]*m, 0, 1, 0);
-            matrix.rotate(this.rotations[part]["Z"]*m, 0, 0, 1);    
-        }
-    }
 
     rotateAppendage(part, angle, axis, inverse=false){
         
@@ -518,11 +496,58 @@ class Jester {
         this.transformBody();
     }
 
-    setRotation(part, angle, axis, m){
-        this.rotations[part][axis] = m*angle;
-        this.rotations[part].isRotated = !( this.rotations[part]["x"] == 0 &&
-                                            this.rotations[part]["y"] == 0 &&
-                                            this.rotations[part]["z"] == 0 );
+    setRotation(part, angle, axis){
+        this.rotations[part][axis] = angle;
+        this.rotations[part].isRotated = !( this.rotations[part]["X"] == 0 &&
+                                            this.rotations[part]["Y"] == 0 &&
+                                            this.rotations[part]["Z"] == 0 );
+    }
+
+    checkRotation(part, matrix){
+        if (this.rotations[part].isRotated){
+            //let m = (inverse) ? -1: 1;
+            matrix.rotate(this.rotations[part]["X"], 1, 0, 0);
+            matrix.rotate(this.rotations[part]["Y"], 0, 1, 0);
+            matrix.rotate(this.rotations[part]["Z"], 0, 0, 1);    
+        }
+    }
+
+
+    setScale(part, scale, axis=''){
+        if (axis == ''){
+            this.rotations[part]['X'] = scale;
+            this.rotations[part]['Y'] = scale;
+            this.rotations[part]['Z'] = scale;
+        } else 
+            this.rotations[part][axis] = scale;
+        this.rotations[part].isScaled = !( this.scales[part]["X"] == 1 &&
+                                            this.scales[part]["Y"] == 1 &&
+                                            this.scales[part]["Z"] == 1 );
+    }
+
+    checkScale(part, matrix){
+        if (this.scales[part].isScaled){
+            //let m = (inverse) ? -1: 1;
+            matrix.scale(this.scales[part]["X"], this.scales[part]["Y"], this.scales[part]["Z"]);
+        }
+    }
+
+    setTranslation(part, x=0, y=0, z=0){
+        this.translations[part]['X'] = x;
+        this.translations[part]['Y'] = y;
+        this.translations[part]['Z'] = z;
+        this.translations[part].isTranslated = !( this.translations[part]["X"] == 0 &&
+                                            this.translations[part]["Y"] == 0 &&
+                                            this.translations[part]["Z"] == 0 );
+    }
+
+    checkTranslation(part, matrix){
+        if (this.translations[part].isTranslated){
+            //let m = (inverse) ? -1: 1;
+            matrix.translate(this.translations[part]["X"], 
+                            this.translations[part]["Y"], 
+                            this.translations[part]["Z"]);    
+        }
     }
 
     render(){
@@ -531,15 +556,192 @@ class Jester {
         }
     }
 
+    transitionTo(state){
+
+    }
+
     idleStart(){
         
     }
 
-    idleAnimation(seconds){
+    idleAnimation(){
+
+        
+    }
+
+    initAnimation(){
+        const SPEED = 10;
+        this.runAnim = [
+        {
+            part:"rthigh",
+            min: -50,
+            max:  40,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+            } 
+        },
+        {
+            part:"lthigh",
+            min: -50,
+            max:  40,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.cos(SPEED*s+Math.PI/2);
+            } 
+        },
+        {
+            part:"lcalf",
+            min:  -60,
+            max:  -0,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.cos(SPEED*s+Math.PI/2);
+            } 
+        },
+        {
+            part:"rcalf",
+            min:  -90,
+            max:  -0,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+                return Math.sin(s+0*Math.PI/2);
+            } 
+        },
+        {
+            part:"abdomen",
+            min:  0.1,
+            max:  -0.1,
+            transform: "translate",
+            tweenX: (s) => 0,
+            tweenY: (s) => {
+                return Math.cos(2*SPEED*s);
+            },
+            tweenZ: (s) => 0,
+        },
+        {
+            part:"ruuparm",
+            min: -35,
+            max:  55,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.cos(SPEED*s+Math.PI/2);
+                
+            } 
+        },
+        {
+            part:"luuparm",
+            min: -35,
+            max:  55,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+            } 
+        },
+        {
+            part:"rfoarm",
+            min: 30,
+            max:  90,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.cos(SPEED*s+Math.PI/2);
+                
+            } 
+        },
+        {
+            part:"lfoarm",
+            min: 30,
+            max:  90,
+            transform: "rotate",
+            axis: "X",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+            } 
+        },
+    ]
+
+    this.runInit = [
+        {
+            part: "ruuparm",
+            transform: "rotate",
+            angle: 80, 
+            axis: "Z",       
+        },
+        {
+            part: "luuparm",
+            transform: "rotate",
+            angle: -80, 
+            axis: "Z",       
+        },
+    ]
+
 
     }
 
-    walkAnimation(seconds){
+    startAnim(animation){
+        console.log("YOYOYO")
+        for (let i in animation){
+            let anim = animation[i];
+            console.log(anim)
+            if (anim.transform == "rotate"){
+                this.setRotation(anim.part,  anim.angle, anim.axis);
+            } else if (anim.transform == "translation"){
+                this.setTranslation(anim.part, anim.x, anim.y, anim.z);
+            }
+        }
+        this.transformBody();
+    }
+
+    animate(animation){
+        for (let i in animation){
+            let anim = animation[i];
+            //console.log(anim)
+            let MID = (anim.max-anim.min)/2;
+            let BEGIN = MID + anim.min;
+            if (anim.transform == "rotate"){
+                this.setRotation(anim.part,  BEGIN+MID*anim.tween(g_seconds), anim.axis);
+            } else if (anim.transform == "translate"){
+                //console.log(anim);
+                this.setTranslation(anim.part, 
+                                            BEGIN+MID*anim.tweenX(g_seconds), 
+                                            BEGIN+MID*anim.tweenY(g_seconds), 
+                                            BEGIN+MID*anim.tweenZ(g_seconds), 
+                                    );
+            }
+        }
+        this.transformBody();
+    }
+    runStart(){
+        this.startAnim(this.runInit);
+    }
+    
+    runAnimation(){
+        this.animate(this.runAnim);
+        // // Max angle
+        // let MAX_THIGH = 65;
+        // // Min angle
+        // let MIN_THIGH = -60;
+        // // Half Diff
+        // let MID_THIGH = (MAX_THIGH-MIN_THIGH)/2;
+        // let BEG_THIGH = MID_THIGH + MIN_THIGH;
+        // this.setRotation("rthigh", BEG_THIGH+MID_THIGH*Math.sin(1*g_seconds), 'X');
+        // this.setRotation("lthigh", BEG_THIGH+MID_THIGH*Math.cos(1*g_seconds+Math.PI/2), 'X');   
+        // this.transformBody();     
+
+        // let  = (MAX_THIGH-MIN_THIGH)/2;
+        // let  = MID_THIGH + MIN_THIGH;
+        // this.setRotation("rthigh", BEG_THIGH+MID_THIGH*Math.sin(1*g_seconds), 'X');
+        // this.setRotation("lthigh", BEG_THIGH+MID_THIGH*Math.cos(1*g_seconds+Math.PI/2), 'X');   
+        // this.transformBody();     
+
         
     }
 }

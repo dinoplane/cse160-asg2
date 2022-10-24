@@ -98,11 +98,15 @@ let g_globalYAngle = 0;
 let g_globalZAngle = 0;
 let g_zoomScale = 0.5;
 
-let g_selectedColor=[1.0,0.0,0.0,g_selectedAlpha];
-let g_selectedType= POINT;
-let g_selectedSize = 5.0;
-let g_selectedSegs = 10;
+// 0 nothing, 1 run 2 something else if i have time
+// Crazy Meter
+let g_animation = 0;
 
+
+
+let ax = ['X', 'Y', 'Z'];
+let appendages = ["uuparm",  "foarm", "hand", "thigh",  "calf", "foot"];
+  
 function addActionsForHtmlUI(){
   // document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
   //   if (ev.buttons == 1){
@@ -136,30 +140,29 @@ function addActionsForHtmlUI(){
     }
   });
   
-  document.getElementById("pelvisSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      jester.rotateAppendage("pelvis", this.value, 'Z');
-      renderScene();
-      //jester.render();
-      //console.log("pp")
-    }
-  });
 
-  // document.getElementById("lchestSlide").addEventListener('mousemove', function(ev) {
-  //   if (ev.buttons == 1){
-  //     jester.rotateAppendage("lchest", this.value, 'Z');
-  //     renderScene();
-  //   }
-  // });
+  document.getElementById("runButton").onclick = function(ev){
+    console.log("hello")
+    sendTextToHTML("Anim: Run", "anim");
+    g_animation = 1;
+    jester.runStart();
+  }
 
-  document.getElementById("headSlide").addEventListener('mousemove', function(ev) {
-    if (ev.buttons == 1){
-      jester.rotateAppendage("head", this.value, 'Z');
-      //renderScene();
-    }
+  document.getElementById("stopButton").onclick = function(ev){
+    sendTextToHTML("Anim: None", "anim");
+    g_animation = 0;
+  }
+
+  ax.forEach(x => {
+    let element = document.getElementById("head"+x+"Slide");
+    if (element != null)
+      element.addEventListener('mousemove', function(ev) {
+        if (ev.buttons == 1){
+          jester.rotateAppendage("head", this.value, x);
+          //renderScene();
+        }
+      });
   });
-  let appendages = ["uuparm",  "foarm", "hand", "thigh",  "calf", "foot"];
-  let ax = ['X', 'Y', 'Z'];
 
   ax.forEach(x => {
     let element = document.getElementById("pelvis"+x+"Slide");
@@ -226,9 +229,16 @@ function addActionsForHtmlUI(){
 }
 
 function updateSliders(){
-  document.getElementById("redSlide").value = g_selectedColor[0]*100;
-  document.getElementById("greenSlide").value = g_selectedColor[1]*100;
-  document.getElementById("blueSlide").value = g_selectedColor[2]*100;
+//  document.getElementById("headSlide");
+
+  for (let s in jester.body){
+    ax.forEach(x => {
+
+      let element = document.getElementById(s+x+"Slide");
+      if (element != null)
+        element.value = jester.body[s][x];
+    });
+  }
 }
 
 function main() {
@@ -281,7 +291,7 @@ function click(ev){
 
 function drag(ev) {
   let [x, y] = convertToCoordinatesEventToGL(ev);
-  console.log(x, y);
+  //console.log(x, y);
   let dy = y-py;
   let dx = px-x;
 
@@ -356,21 +366,30 @@ function renderScene(){
     M1.scale(0.45, 0.45, 0.45);
     drawCube([1,1,1,1], M1);
   }
-  
+  //console.log(g_animation);
   //jester.rotateAppendage("head", 45/36, 0, 0, 1);
 
   jester.render();
+  //updateSliders();
 
   var duration = performance.now() - startTime;
   sendTextToHTML(
                 " ms: " + Math.floor(duration) + 
                 " fps: " + Math.floor(10000/duration), "numdot");
 }
+
+
 let g_startTime=performance.now()/1000.0;
 let g_seconds=performance.now()/1000.0-g_startTime;
+
 function tick(){
   //console.log(performance.now());
-  g_seconds=performance.now()/1000.0-g_startTime;
+  if (g_animation > 0)g_seconds=performance.now()/1000.0-g_startTime;
+  switch(g_animation){
+    case 1:
+      jester.runAnimation();
+      break;
+  }
   renderScene();
   requestAnimationFrame(tick);
 }
