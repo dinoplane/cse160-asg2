@@ -2,7 +2,8 @@
 
 class Jester {
     constructor(){
-  
+        
+        this.isExploding = false;
         this.createBody();
         this.transformBody();
         this.initAnimation();
@@ -61,7 +62,7 @@ class Jester {
 
         // Head
 
-        this.body["head"] = new Cube([1, 1, 1, 1]);
+        this.body["head"] = new ClownHead();
     
 
         // Legs
@@ -236,7 +237,7 @@ class Jester {
         // Right foot joint
         this.checkRotation("rfjoint", M_rfjoint);        
         M_rfjoint.translate(0, -0.2, 0);
-        M_rfjoint.rotate(90, 0, 0, 1);
+        M_rfjoint.rotate(-90, 0, 0, 1);
         let M_rfoot = new Matrix4(M_rfjoint);
 
         M_rfjoint.scale(0.4, 0.4, 0.4);
@@ -244,7 +245,7 @@ class Jester {
 
         // Right foot
         this.checkRotation("rfoot", M_rfoot);     
-        M_rfoot.rotate(-90, 0, 0, 1);   
+        M_rfoot.rotate(90, 0, 0, 1);   
         M_rfoot.translate(0, -0.02, -0.1);
 
         M_rfoot.scale(0.2, 0.3, 0.25);
@@ -297,28 +298,7 @@ class Jester {
         M_lfoot.scale(0.2, 0.3, 0.25);
         this.body["lfoot"].matrix = M_lfoot;
 
-
-        //
-        
-        // torso.setHeight(1.7);
-        // //p3.render();
-        
-        
-        // M_lchest.translate(0, 0.9, 0);
-        // M_lchest.rotate(45, 0, 0, 1);
-        
-        
-        
-        // M_lchest.scale(0.5, -0.5, 0.5);
-        // this.body.push(M_lchest);
-        //let  = new Pyramid(10, 1.0, [1, 0.5, 0.8, 1], M_lchest);
-        // p4.setMaxWidth(1);
-        // p4.scaleFace(1.2);
-        // //p4.render();
-
-        // Chest
-        
-
+        // Lower Chest and Upper Chest
         this.checkRotation("lchest", M_lchest);
         M_lchest.translate(0, 0.1, 0);
         let M_uchest = new Matrix4(M_lchest);
@@ -332,6 +312,8 @@ class Jester {
         
         M_uchest.scale(0.5, 0.5, 0.5);
         this.body["uchest"].matrix = M_uchest;
+
+        //Right Shoulder
 
         this.checkRotation("rshoulder", M_rshoulder);
         M_rshoulder.translate(-0.18, 0.07, 0);
@@ -380,17 +362,16 @@ class Jester {
         M_rwrist.rotate(90, 0, 0, 1);
         let M_rhand = new Matrix4(M_rwrist);
 
-        M_rwrist.scale(0.4, 0.4, 0.4);
+        M_rwrist.scale(0.3, 0.3, 0.3);
         this.body["rwrist"].matrix = M_rwrist;
 
         // Right Hand
         this.checkRotation("rhand", M_rhand);     
         M_rhand.rotate(-90, 0, 0, 1); 
-        // M_rhand.rotate(90, 1, 0, 0); 
         
         M_rhand.translate(0, -0.1, 0);
 
-        M_rhand.scale(0.05, 1.0, 0.2);
+        M_rhand.scale(0.03, 0.7, 0.16);
         this.body["rhand"].matrix = M_rhand;
 
         //Left Shoulder
@@ -403,7 +384,6 @@ class Jester {
         // Left Upperupper arm
         this.checkRotation("luuparm", M_luuparm);
         M_luuparm.rotate(90, 0, 0, 1);
-        //M_luuparm.scale(-1, 1, 1);
         
         M_luuparm.translate(-0.0, -0.05, 0);
         
@@ -443,15 +423,14 @@ class Jester {
         M_lwrist.rotate(-90, 0, 0, 1);
         let M_lhand = new Matrix4(M_lwrist);
 
-        M_lwrist.scale(0.4, 0.4, 0.4);
+        M_lwrist.scale(0.3, 0.3, 0.3);
         this.body["lwrist"].matrix = M_lwrist;
 
         // Left Hand
         this.checkRotation("lhand", M_lhand);     
         M_lhand.rotate(90, 0, 0, 1); 
-        //M_lhand.rotate(90, 1, 0, 0); 
         M_lhand.translate(0, -0.1, 0.0);
-        M_lhand.scale(0.05, 1.0, 0.2);
+        M_lhand.scale(0.03, 0.7, 0.16);
         this.body["lhand"].matrix = M_lhand;
 
 
@@ -463,30 +442,13 @@ class Jester {
 
         // Head
         this.checkRotation("head", M_head);
+        this.checkTranslation("head", M_head);
         M_head.translate(0, 0.03, 0);
+    
+        this.checkScale("head", M_head);
+        this.body["head"].setMatrix(M_head);
         M_head.scale(0.4, 0.4, 0.4);
-        this.body["head"].matrix = M_head;
-
-        // Right Leg joint
-        // Right Thigh
-        // Right Calf
-        // Right Foot
-        
-        // Left Leg joint
-        // Left Thigh
-        // Left Calf
-        // Left Foot
-        
-
-
-
-        // Right Arm joint
-        // 
-        // Left Arm joint
-
-
-
-
+    
     }
 
 
@@ -514,13 +476,14 @@ class Jester {
 
 
     setScale(part, scale, axis=''){
+        //console.log(part, scale, axis);
         if (axis == ''){
-            this.rotations[part]['X'] = scale;
-            this.rotations[part]['Y'] = scale;
-            this.rotations[part]['Z'] = scale;
+            this.scales[part]['X'] = scale;
+            this.scales[part]['Y'] = scale;
+            this.scales[part]['Z'] = scale;
         } else 
-            this.rotations[part][axis] = scale;
-        this.rotations[part].isScaled = !( this.scales[part]["X"] == 1 &&
+            this.scales[part][axis] = scale;
+        this.scales[part].isScaled = !( this.scales[part]["X"] == 1 &&
                                             this.scales[part]["Y"] == 1 &&
                                             this.scales[part]["Z"] == 1 );
     }
@@ -533,6 +496,7 @@ class Jester {
     }
 
     setTranslation(part, x=0, y=0, z=0){
+        //console.log(part, x, y, z);
         this.translations[part]['X'] = x;
         this.translations[part]['Y'] = y;
         this.translations[part]['Z'] = z;
@@ -666,8 +630,27 @@ class Jester {
                 return Math.sin(SPEED*s);
             } 
         },
+        {
+            part:"rfoot",
+            min: -50,
+            max: 0,
+            transform: "rotate",
+            axis: "Y",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+            } 
+        },
+        {
+            part:"lfoot",
+            min: 0,
+            max: 50,
+            transform: "rotate",
+            axis: "Y",
+            tween: (s) => {
+                return Math.sin(SPEED*s);
+            } 
+        }
     ]
-
     this.runInit = [
         {
             part: "ruuparm",
@@ -683,24 +666,82 @@ class Jester {
         },
     ]
 
+    this.resetExplode();
+
+    // this.growHeadAnim = [
+    //     {
+    //         part:"head",
+    //         min: 1,
+    //         max: 4,
+    //         timer: 0,
+    //         countdown: 10, 
+    //         transform: "scale",
+    //         axis: "",
+    //         tween: (s) => {
+    //             this.explodeAnim[0].timer += 0.0001;
+    //             let t = this.explodeAnim[0].timer;
+    //             if (t , this.explodeAnim[0].countdown)
+    //                     lerpthis.explodeAnim[0].timer;
+    //             else return 0;
+    //         } 
+    //     },
+    // ]
 
     }
 
+    resetExplode(){
+        this.explodeAnim = [
+            {
+                part:"head",
+                min: 1,
+                max: 4,
+                timer: 0,
+                countdown: 10, 
+                transform: "scale",
+                axis: "",
+                tween: (s) => {
+                    this.explodeAnim[0].timer += 0.01;
+                    let t = this.explodeAnim[0].timer;
+                    //console.log(lerp(t, 0, this.explodeAnim[0].countdown, this.explodeAnim[0].min, this.explodeAnim[0].max));
+                    if (t < this.explodeAnim[0].countdown)
+                        return lerp(t, 0, this.explodeAnim[0].countdown, this.explodeAnim[0].min, this.explodeAnim[0].max);
+                    else return 0;
+                } 
+            },
+            {
+                part:"head",
+                min: -0.01,
+                max: 0.01,
+                transform: "translate",
+                tweenX: (s) => { 
+                    return (Math.random()*2 - 1);
+                }, 
+                tweenY: (s) => { 
+                    return (Math.random()*2 - 1);
+                }, 
+                tweenZ: (s) => { 
+                    return (Math.random()*2 - 1);
+                }
+            },
+        ]
+    }
+
     startAnim(animation){
-        console.log("YOYOYO")
         for (let i in animation){
             let anim = animation[i];
-            console.log(anim)
             if (anim.transform == "rotate"){
                 this.setRotation(anim.part,  anim.angle, anim.axis);
-            } else if (anim.transform == "translation"){
+            } else if (anim.transform == "translate"){
                 this.setTranslation(anim.part, anim.x, anim.y, anim.z);
+            } else {
+                this.setScale(anim.part, anim.scale, anim.axis);
             }
         }
         this.transformBody();
     }
 
     animate(animation){
+        //console.log("YO")
         for (let i in animation){
             let anim = animation[i];
             //console.log(anim)
@@ -710,11 +751,14 @@ class Jester {
                 this.setRotation(anim.part,  BEGIN+MID*anim.tween(g_seconds), anim.axis);
             } else if (anim.transform == "translate"){
                 //console.log(anim);
+                //console.log(anim.tweenX(g_seconds));
                 this.setTranslation(anim.part, 
                                             BEGIN+MID*anim.tweenX(g_seconds), 
                                             BEGIN+MID*anim.tweenY(g_seconds), 
                                             BEGIN+MID*anim.tweenZ(g_seconds), 
                                     );
+            } else {
+                this.setScale(anim.part, anim.tween(g_seconds), anim.axis);
             }
         }
         this.transformBody();
@@ -722,26 +766,22 @@ class Jester {
     runStart(){
         this.startAnim(this.runInit);
     }
-    
     runAnimation(){
         this.animate(this.runAnim);
-        // // Max angle
-        // let MAX_THIGH = 65;
-        // // Min angle
-        // let MIN_THIGH = -60;
-        // // Half Diff
-        // let MID_THIGH = (MAX_THIGH-MIN_THIGH)/2;
-        // let BEG_THIGH = MID_THIGH + MIN_THIGH;
-        // this.setRotation("rthigh", BEG_THIGH+MID_THIGH*Math.sin(1*g_seconds), 'X');
-        // this.setRotation("lthigh", BEG_THIGH+MID_THIGH*Math.cos(1*g_seconds+Math.PI/2), 'X');   
-        // this.transformBody();     
+    }
 
-        // let  = (MAX_THIGH-MIN_THIGH)/2;
-        // let  = MID_THIGH + MIN_THIGH;
-        // this.setRotation("rthigh", BEG_THIGH+MID_THIGH*Math.sin(1*g_seconds), 'X');
-        // this.setRotation("lthigh", BEG_THIGH+MID_THIGH*Math.cos(1*g_seconds+Math.PI/2), 'X');   
-        // this.transformBody();     
-
-        
+    explodeStart(){
+        this.isExploding = true;
+    }
+    explodeAnimation(){
+        this.animate(this.explodeAnim);
+        if (this.explodeAnim[0].timer > 14){
+            this.isExploding = false;
+            this.resetExplode();
+            this.setScale("head", 1, "")
+            this.setTranslation("head", 0, 0, 0);
+            this.body["head"].matrix = new Matrix4();
+            this.transformBody();
+        }
     }
 }

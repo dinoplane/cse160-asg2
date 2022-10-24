@@ -101,6 +101,7 @@ let g_zoomScale = 0.5;
 // 0 nothing, 1 run 2 something else if i have time
 // Crazy Meter
 let g_animation = 0;
+let g_exploding = false;
 
 
 
@@ -145,11 +146,22 @@ function addActionsForHtmlUI(){
     console.log("hello")
     sendTextToHTML("Anim: Run", "anim");
     g_animation = 1;
+    disableSlidersforAnim(jester.runAnim);
     jester.runStart();
   }
 
   document.getElementById("stopButton").onclick = function(ev){
     sendTextToHTML("Anim: None", "anim");
+    enableAllSliders();
+    g_animation = 0;
+  }
+
+  document.getElementById("resetButton").onclick = function(ev){
+    sendTextToHTML("Anim: None", "anim");
+    enableAllSliders();
+    jester.createBody();
+    jester.transformBody();
+    updateAllSliders();
     g_animation = 0;
   }
 
@@ -159,7 +171,6 @@ function addActionsForHtmlUI(){
       element.addEventListener('mousemove', function(ev) {
         if (ev.buttons == 1){
           jester.rotateAppendage("head", this.value, x);
-          //renderScene();
         }
       });
   });
@@ -170,7 +181,6 @@ function addActionsForHtmlUI(){
       element.addEventListener('mousemove', function(ev) {
         if (ev.buttons == 1){
           jester.rotateAppendage("pelvis", this.value, x);
-          //renderScene();
         }
       });
   });
@@ -181,19 +191,9 @@ function addActionsForHtmlUI(){
       element.addEventListener('mousemove', function(ev) {
         if (ev.buttons == 1){
           jester.rotateAppendage("lchest", this.value, x);
-          //renderScene();
         }
       });
   });
-
-  // ax.forEach(x => {
-  //   document.getElementById("head"+x+"Slide").addEventListener('mousemove', function(ev) {
-  //     if (ev.buttons == 1){
-  //       jester.rotateAppendage("head", this.value, x);
-  //       renderScene();
-  //     }
-  //   });
-  // });
 
   appendages.forEach((a) => {
     ax.forEach(x => {
@@ -228,16 +228,95 @@ function addActionsForHtmlUI(){
 
 }
 
-function updateSliders(){
+function disableSlidersforAnim(anim){
+  for (let s in anim){
+      let name = anim[s].part
+      let x = anim[s].axis;
+      console.log(name);
+      let element = document.getElementById(name+x+"Slide");
+      if (element != null)
+        element.disabled = true;
+  
+  }
+}
+
+function enableAllSliders(){
+  ax.forEach(x => {
+    let element = document.getElementById("head"+x+"Slide");
+    if (element != null)
+      element.disabled = false;
+  });
+
+  ax.forEach(x => {
+    let element = document.getElementById("pelvis"+x+"Slide");
+    if (element != null)
+      element.disabled = false;
+  });
+
+  ax.forEach(x => {
+    let element = document.getElementById("lchest"+x+"Slide");
+    if (element != null)
+      element.disabled = false;
+  });
+
+  appendages.forEach((a) => {
+    ax.forEach(x => {
+      let lname = 'l'+a;
+      let rname = 'r'+a;
+      let element = document.getElementById(lname+x+"Slide")
+      if (element != null)
+        element.disabled = false;
+      element = document.getElementById(rname+x+"Slide");
+      if (element != null)
+        element.disabled = false;
+    });
+  })
+}
+
+function updateAllSliders(){
+  ax.forEach(x => {
+    let element = document.getElementById("head"+x+"Slide");
+    if (element != null)
+      element.value = jester.rotations["head"][x];
+  });
+
+  ax.forEach(x => {
+    let element = document.getElementById("pelvis"+x+"Slide");
+    if (element != null)
+      element.value = jester.rotations["pelvis"][x]
+  });
+
+  ax.forEach(x => {
+    let element = document.getElementById("lchest"+x+"Slide");
+    if (element != null)
+      element.value = jester.rotations["lchest"][x];
+  });
+
+  appendages.forEach((a) => {
+    ax.forEach(x => {
+      let lname = 'l'+a;
+      let rname = 'r'+a;
+      let element = document.getElementById(lname+x+"Slide")
+      if (element != null)
+        element.value = jester.rotations[lname][x];
+      element = document.getElementById(rname+x+"Slide");
+      if (element != null)
+        element.value = jester.rotations[rname][x];
+    });
+  })
+}
+
+function updateSliders(anim){
 //  document.getElementById("headSlide");
 
-  for (let s in jester.body){
-    ax.forEach(x => {
+  for (let s in anim){
 
-      let element = document.getElementById(s+x+"Slide");
-      if (element != null)
-        element.value = jester.body[s][x];
-    });
+    let name = anim[s].part;
+    let x = anim[s].axis;
+    let element = document.getElementById(name+x+"Slide");
+    if (element != null)
+      element.value = jester.rotations[name][x];
+
   }
 }
 
@@ -286,18 +365,25 @@ let px = 0;
 let py = 0;
 
 function click(ev){
-  [px, py] = convertToCoordinatesEventToGL(ev);
+  if (ev.shiftKey && !g_exploding){
+    console.log("HI");
+    g_exploding = true;
+    jester.explodeStart();
+  } else 
+    [px, py] = convertToCoordinatesEventToGL(ev);
+
 }
 
 function drag(ev) {
-  let [x, y] = convertToCoordinatesEventToGL(ev);
-  //console.log(x, y);
-  let dy = y-py;
-  let dx = px-x;
+  if (!ev.shiftKey){
+    let [x, y] = convertToCoordinatesEventToGL(ev);
+    //console.log(x, y);
+    let dy = y-py;
+    let dx = px-x;
 
-  g_globalXAngle +=dy;
-  g_globalYAngle +=dx;
-
+    g_globalXAngle +=dy;
+    g_globalYAngle +=dx;
+  }
 }
 
 function randomizeColor(i, j){
@@ -306,41 +392,6 @@ function randomizeColor(i, j){
   g_selectedColor[2] = Noise.perlin(3.9*i, 3.9*j, (g_selectedColor[2]+0.1)/0.9);
   
   updateSliders();
-}
-
-function addPoint(x, y, vertices=[]){
-  // Create a new point
-  let point;
-  switch(g_selectedType){
-    case POINT:
-      point = new Point([x, y], g_selectedColor.slice(), g_selectedSize);
-      break;
-      
-    case TRIANGLE:  
-      point = new Triangle([x, y], g_selectedColor.slice(), g_selectedSize, vertices);
-      break;
-
-    case CIRCLE:
-      point = new Circle([x, y], g_selectedColor.slice(), g_selectedSize, g_selectedSegs);
-      break;
-
-    default:
-      point = new Point([x, y], g_selectedColor.slice(), g_selectedSize);
-  }
-
-  g_shapesList.push(point);
-}
-
-function push(){
-  saved.push(g_selectedColor, g_selectedSize, g_selectedType, g_selectedSegs, g_selectedAlpha);
-}
-
-function pop(){
-  g_selectedAlpha = saved.pop();
-  g_selectedSegs = saved.pop();
-  g_selectedType = saved.pop();
-  g_selectedSize = saved.pop();
-  g_selectedColor = saved.pop();
 }
 
 function renderScene(){
@@ -386,10 +437,19 @@ function tick(){
   //console.log(performance.now());
   if (g_animation > 0)g_seconds=performance.now()/1000.0-g_startTime;
   switch(g_animation){
-    case 1:
+    case 1:{
       jester.runAnimation();
-      break;
+      //console.log(jester.runAnim);
+      updateSliders(jester.runAnim);
+    } break;
   }
+   if (g_exploding){
+    jester.explodeAnimation();
+    if (!jester.isExploding){
+      g_exploding = false;
+    }
+   }
+
   renderScene();
   requestAnimationFrame(tick);
 }
