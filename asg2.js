@@ -109,29 +109,31 @@ let ax = ['X', 'Y', 'Z'];
 let appendages = ["uuparm",  "foarm", "hand", "thigh",  "calf", "foot"];
   
 function addActionsForHtmlUI(){
-  // document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
-  //   if (ev.buttons == 1){
-  //     g_globalXAngle = this.value; 
-  //     renderScene(); 
-  //     //console.log("pp")
-  //   }
-  // });
+  // Commented these out because no use for them anymore
 
-  // document.getElementById("yangleSlide").addEventListener('mousemove', function(ev) {
-  //   if (ev.buttons == 1){
-  //     g_globalYAngle = this.value; 
-  //     renderScene(); 
-  //     //console.log("pp")
-  //   }
-  // });
+  document.getElementById("xangleSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_globalXAngle = this.value; 
 
-  // document.getElementById("zangleSlide").addEventListener('mousemove', function(ev) {
-  //   if (ev.buttons == 1){
-  //     g_globalZAngle = this.value; 
-  //     renderScene(); 
-  //     //console.log("pp")
-  //   }
-  // });
+      //console.log("pp")
+    }
+  });
+
+  document.getElementById("yangleSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_globalYAngle = this.value; 
+
+      //console.log("pp")
+    }
+  });
+
+  document.getElementById("zangleSlide").addEventListener('mousemove', function(ev) {
+    if (ev.buttons == 1){
+      g_globalZAngle = this.value; 
+
+      //console.log("pp")
+    }
+  });
 
   document.getElementById("zoomSlide").addEventListener('mousemove', function(ev) {
     if (ev.buttons == 1){
@@ -220,12 +222,6 @@ function addActionsForHtmlUI(){
         });
     });
   })
-  // document.getElementById("alphaSlide").addEventListener('mouseup', function() {
-  //   g_selectedAlpha = this.value/100; 
-  //   g_selectedColor[3] = g_selectedAlpha;
-  // });
-  // document.getElementById("segsSlide").addEventListener('mouseup', function() {g_selectedSegs = this.value; });
-
 }
 
 function disableSlidersforAnim(anim){
@@ -236,7 +232,6 @@ function disableSlidersforAnim(anim){
       let element = document.getElementById(name+x+"Slide");
       if (element != null)
         element.disabled = true;
-  
   }
 }
 
@@ -307,10 +302,7 @@ function updateAllSliders(){
 }
 
 function updateSliders(anim){
-//  document.getElementById("headSlide");
-
   for (let s in anim){
-
     let name = anim[s].part;
     let x = anim[s].axis;
     let element = document.getElementById(name+x+"Slide");
@@ -360,13 +352,11 @@ function convertToCoordinatesEventToGL(ev){
   return [x, y];
 }
 
-// var g_shapesList = [];
 let px = 0;
 let py = 0;
 
 function click(ev){
   if (ev.shiftKey && !g_exploding){
-    console.log("HI");
     g_exploding = true;
     jester.explodeStart();
   } else 
@@ -381,10 +371,16 @@ function drag(ev) {
     let dy = y-py;
     let dx = px-x;
 
-    g_globalXAngle +=dy;
-    g_globalYAngle +=dx;
+    console.log(g_globalXAngle, g_globalYAngle);
+    g_globalXAngle =(g_globalXAngle + dy) %360;
+    g_globalYAngle =(g_globalYAngle +dx) % 360;
+    document.getElementById("xangleSlide").value = g_globalXAngle;
+    document.getElementById("yangleSlide").value = g_globalYAngle;
+    
   }
 }
+
+
 
 function randomizeColor(i, j){
   g_selectedColor[0] = Noise.perlin((g_selectedColor[0]+0.1)/0.9, 3.9*i, 3.9*j);

@@ -31,7 +31,11 @@ class Jester {
         //this.body["lpelvis"].scaleFace(2);
         this.body["lpelvis"].setHeight(0.4); // YEEE
         
-        
+        this.body["dress"] = new Prism(10, 0.9, [1, 0.2, 0.75, 1]);
+        this.body["dress"].setMaxWidth(1);
+        this.body["dress"].scaleFace("b", 1.4);
+        this.body["dress"].scaleFace("t", 0.6);
+
         this.body["lchest"] = new Prism(10, 0.25, [1, 0.5, 0.8, 1]);
         this.body["lchest"].setMaxWidth(1);
         this.body["lchest"].scaleFace("t", 1.0);
@@ -74,12 +78,12 @@ class Jester {
 
         // Thighs
         const THIGH_LENGTH = 0.7
-        this.body["rthigh"] = new Prism(10, THIGH_LENGTH, [1, 1, 1, 1]);
+        this.body["rthigh"] = new Prism(10, THIGH_LENGTH, [1, 0.8, 0.7, 1]);
         this.body["rthigh"].setMaxWidth(1);
         this.body["rthigh"].scaleFace("t", 0.4);
         this.body["rthigh"].scaleFace("b", 0.25);
 
-        this.body["lthigh"] = new Prism(10, THIGH_LENGTH, [1, 1, 1, 1]);
+        this.body["lthigh"] = new Prism(10, THIGH_LENGTH, [1, 0.8, 0.7, 1]);
         this.body["lthigh"].setMaxWidth(1);
         this.body["lthigh"].scaleFace("t", 0.4);
         this.body["lthigh"].scaleFace("b", 0.25);
@@ -112,11 +116,11 @@ class Jester {
 
         // Arms
         const ARM_LENGTH = 0.5
-        this.body["ruparm"] = new Prism(10, ARM_LENGTH, [1, 1, 1, 1]);
+        this.body["ruparm"] = new Prism(10, ARM_LENGTH, [1, 0.8, 0.7, 1]);
         this.body["ruparm"].setMaxWidth(1);
         this.body["ruparm"].scaleFace("t", 0.3);
         this.body["ruparm"].scaleFace("b", 0.25);
-        this.body["luparm"] = new Prism(10, ARM_LENGTH, [1, 1, 1, 1]);
+        this.body["luparm"] = new Prism(10, ARM_LENGTH, [1, 0.8, 0.7, 1]);
         this.body["luparm"].setMaxWidth(1);
         this.body["luparm"].scaleFace("t", 0.3);
         this.body["luparm"].scaleFace("b", 0.25);
@@ -126,11 +130,11 @@ class Jester {
         this.body["lelbow"] = new Icosahedron([1, 1, 1, 1], new Matrix4(), true);
 
         // ForeArms
-        this.body["rfoarm"] = new Prism(10, 0.5, [1, 1, 1, 1]);
+        this.body["rfoarm"] = new Prism(10, 0.5, [1, 0.5, 0.7, 1]);
         this.body["rfoarm"].setMaxWidth(1);
         this.body["rfoarm"].scaleFace("t", 0.25);
         this.body["rfoarm"].scaleFace("b", 0.2);
-        this.body["lfoarm"] = new Prism(10, 0.5, [1, 1, 1, 1]);
+        this.body["lfoarm"] = new Prism(10, 0.5, [1, 0.5, 0.7, 1]);
         this.body["lfoarm"].setMaxWidth(1);
         this.body["lfoarm"].scaleFace("t", 0.25);
         this.body["lfoarm"].scaleFace("b", 0.2);
@@ -190,7 +194,6 @@ class Jester {
         this.checkRotation("pelvis", M_pelvis);
         M_pelvis.translate(0, -0.2, 0);
         
-        //let M_lthigh = new Matrix4(M_pelvis);
         let M_lpelvis = new Matrix4(M_pelvis);
         let M_rtjoint = new Matrix4(M_pelvis);
         let M_ltjoint = new Matrix4(M_pelvis);
@@ -199,8 +202,13 @@ class Jester {
         this.body["pelvis"].matrix = M_pelvis;
 
         M_lpelvis.translate(0, -0.22, 0);
+        let M_dress = new Matrix4(M_lpelvis);
         M_lpelvis.scale(0.5, -0.5, 0.37);
         this.body["lpelvis"].matrix = M_lpelvis;
+
+        M_dress.translate(0, 0.1, 0);
+        M_dress.scale(0.7, 0.5, 0.7);
+        this.body["dress"].matrix = M_dress;
 
         //Right Thigh Joint
         M_rtjoint.translate(-0.13, -0.13, 0);
