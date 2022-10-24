@@ -390,7 +390,7 @@ class Jester {
         
         M_rhand.translate(0, -0.1, 0);
 
-        M_rhand.scale(0.05, 1.0, 0.25);
+        M_rhand.scale(0.05, 1.0, 0.2);
         this.body["rhand"].matrix = M_rhand;
 
         //Left Shoulder
@@ -451,7 +451,7 @@ class Jester {
         M_lhand.rotate(90, 0, 0, 1); 
         //M_lhand.rotate(90, 1, 0, 0); 
         M_lhand.translate(0, -0.1, 0.0);
-        M_lhand.scale(0.05, 1.0, 0.25);
+        M_lhand.scale(0.05, 1.0, 0.2);
         this.body["lhand"].matrix = M_lhand;
 
 
