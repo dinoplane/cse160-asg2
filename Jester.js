@@ -528,19 +528,6 @@ class Jester {
         }
     }
 
-    transitionTo(state){
-
-    }
-
-    idleStart(){
-        
-    }
-
-    idleAnimation(){
-
-        
-    }
-
     initAnimation(){
         const SPEED = 10;
         this.runAnim = [
@@ -663,13 +650,13 @@ class Jester {
         {
             part: "ruuparm",
             transform: "rotate",
-            angle: 80, 
+            angle: 60, 
             axis: "Z",       
         },
         {
             part: "luuparm",
             transform: "rotate",
-            angle: -80, 
+            angle: -60, 
             axis: "Z",       
         },
     ]

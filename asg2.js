@@ -404,21 +404,17 @@ function renderScene(){
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 
 
-  const START=0.75;
-  const RAD=1;
-  const NUM_S = 5;
-  for (let i = 0; i < NUM_S; i++){
-    let M1 = new Matrix4();
-    M1.translate(-1.5, lerp(i, 0, NUM_S-1, START, START-2*RAD), 0);
-    M1.scale(0.45, 0.45, 0.45);
-    drawCube([1,1,1,1], M1);
-  }
-  //console.log(g_animation);
-  //jester.rotateAppendage("head", 45/36, 0, 0, 1);
-
+  // const START=0.75;
+  // const RAD=1;
+  // const NUM_S = 5;
+  // for (let i = 0; i < NUM_S; i++){
+  //   let M1 = new Matrix4();
+  //   M1.translate(-1.5, lerp(i, 0, NUM_S-1, START, START-2*RAD), 0);
+  //   M1.scale(0.45, 0.45, 0.45);
+  //   drawCube([1,1,1,1], M1);
+  // }
   jester.render();
-  //updateSliders();
-
+  
   var duration = performance.now() - startTime;
   sendTextToHTML(
                 " ms: " + Math.floor(duration) + 
