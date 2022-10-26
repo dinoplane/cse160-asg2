@@ -64,8 +64,9 @@ class Jester {
         // Neck
         this.body["neck"] = new Cube([1, 0.5, 0.8, 1]);
 
-        // Head
+        this.body["cape"] = new Fabric(0.1, 15, 5, [1, 0, 0, 1]);
 
+        // Head
         this.body["head"] = new ClownHead();
     
 
@@ -443,15 +444,28 @@ class Jester {
 
 
         //Neck
-        M_neck.translate(0, 0.4, 0.0);
+        M_neck.translate(0, 0.2, 0.0);
         let M_head = new Matrix4(M_neck);
+        let M_cape = new Matrix4(M_neck);
         M_neck.scale(0,0,0)
         this.body["neck"].matrix = M_neck;
+
+        // Cape 
+
+        this.checkRotation("cape", M_cape);
+        M_cape.rotate(50, 1, 0, 0);
+        this.checkTranslation("cape", M_cape);
+        M_cape.translate(0, 0, this.body["cape"].length/2 + 0.2);
+
+        //M_cape.setScale(-1, 1, 1);
+        
+        this.checkScale("cape", M_cape);
+        this.body["cape"].matrix = M_cape;
 
         // Head
         this.checkRotation("head", M_head);
         this.checkTranslation("head", M_head);
-        M_head.translate(0, 0.03, 0);
+        M_head.translate(0, 0.2, 0);
     
         this.checkScale("head", M_head);
         this.body["head"].setMatrix(M_head);
@@ -659,6 +673,12 @@ class Jester {
             angle: -60, 
             axis: "Z",       
         },
+        {
+            part:"cape",
+            transform:"rotate",
+            angle:-50,
+            axis:'X'
+        }
     ]
 
     this.resetExplode();
@@ -763,6 +783,9 @@ class Jester {
     }
     runAnimation(){
         this.animate(this.runAnim);
+        this.body["cape"].animate((s, i, j)=>{
+            return 0.1*Math.cos(20*s + 0.5*j);
+        });
     }
 
     explodeStart(){

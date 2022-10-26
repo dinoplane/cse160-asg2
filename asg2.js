@@ -337,6 +337,7 @@ function main() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   jester = new Jester();
+
   requestAnimationFrame(tick);
 }
 
@@ -371,7 +372,7 @@ function drag(ev) {
     let dy = y-py;
     let dx = px-x;
 
-    console.log(g_globalXAngle, g_globalYAngle);
+    //console.log(g_globalXAngle, g_globalYAngle);
     g_globalXAngle =(g_globalXAngle + dy) %360;
     g_globalYAngle =(g_globalYAngle +dx) % 360;
     document.getElementById("xangleSlide").value = g_globalXAngle;
@@ -387,7 +388,7 @@ function randomizeColor(i, j){
   g_selectedColor[1] = Noise.perlin(3.9*i, (g_selectedColor[1]+0.1)/0.9, 3.9*j);
   g_selectedColor[2] = Noise.perlin(3.9*i, 3.9*j, (g_selectedColor[2]+0.1)/0.9);
   
-  updateSliders();
+  //updateSliders();
 }
 
 function renderScene(){
@@ -406,7 +407,7 @@ function renderScene(){
 
   // const START=0.75;
   // const RAD=1;
-  // const NUM_S = 5;
+  // const NUM_S = 200;
   // for (let i = 0; i < NUM_S; i++){
   //   let M1 = new Matrix4();
   //   M1.translate(-1.5, lerp(i, 0, NUM_S-1, START, START-2*RAD), 0);
@@ -414,6 +415,7 @@ function renderScene(){
   //   drawCube([1,1,1,1], M1);
   // }
   jester.render();
+
   
   var duration = performance.now() - startTime;
   sendTextToHTML(
@@ -427,7 +429,8 @@ let g_seconds=performance.now()/1000.0-g_startTime;
 
 function tick(){
   //console.log(performance.now());
-  if (g_animation > 0)g_seconds=performance.now()/1000.0-g_startTime;
+  // if (g_animation > 0)
+  g_seconds=performance.now()/1000.0-g_startTime;
   switch(g_animation){
     case 1:{
       jester.runAnimation();
@@ -441,7 +444,7 @@ function tick(){
       g_exploding = false;
     }
    }
-
+  //a.animate();
   renderScene();
   requestAnimationFrame(tick);
 }

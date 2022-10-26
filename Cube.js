@@ -1,11 +1,8 @@
 class Cube extends Solid{
     constructor(color_=[1.0, 1.0, 1.0, 1.0], matrix_= new Matrix4()){
         super('cube', color_, matrix_);
-        this.type='cube';
-        this.color = color_;
         this.size = 1.0;
-        this.matrix = matrix_; 
-
+        
         this.calculateVerts();
     }
 
@@ -23,7 +20,7 @@ class Cube extends Solid{
             //console.log(vec1, vec2)
             
             rgba.forEach(function(item, index, array){
-                array[index] = 0.7*item;
+                if (index < 3) array[index] = 0.9*item;
             })
 
             this.tricolors.push([rgba[0], rgba[1], rgba[2], rgba[3]]);

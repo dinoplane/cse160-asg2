@@ -41,17 +41,11 @@ class Solid {
         throw new Error("Method 'calculateVerts()' must be implemented.");
     }
 
-    render(){
-        throw new Error("Method 'render()' must be implemented.");
-    }
-
     pushTriangle3D(vertices){
         this.triangles.push(new Float32Array(vertices));
     }
 
     render(){
-        // console.log("color length", this.tricolors.length);
-        // console.log("trian length", this.triangles.length);
 
         console.assert(this.tricolors.length == this.triangles.length, this.type,
                         this.tricolors.length, "colors and", this.triangles.length, "triangles...")
@@ -68,7 +62,7 @@ class Solid {
         // Bind the buffer object to target
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         // Write date into the buffer object
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
       
         // Assign the buffer object to a_Position variable
         gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
