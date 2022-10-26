@@ -680,7 +680,191 @@ class Jester {
             axis:'X'
         }
     ]
+    const PANICSPEED = 13;
+    this.panicAnim = [
+    {
+        part:"rthigh",
+        min: -50,
+        max:  40,
+        transform: "rotate",
+        axis: "X",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+        } 
+    },
+    {
+        part:"lthigh",
+        min: -50,
+        max:  40,
+        transform: "rotate",
+        axis: "X",
+        tween: (s) => {
+            return Math.cos(PANICSPEED*s+Math.PI/2);
+        } 
+    },
+    {
+        part:"lcalf",
+        min:  -60,
+        max:  -0,
+        transform: "rotate",
+        axis: "X",
+        tween: (s) => {
+            return Math.cos(PANICSPEED*s+Math.PI/2);
+        } 
+    },
+    {
+        part:"rcalf",
+        min:  -90,
+        max:  -0,
+        transform: "rotate",
+        axis: "X",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+            return Math.sin(s+0*Math.PI/2);
+        } 
+    },
+    {
+        part:"abdomen",
+        min:  0.1,
+        max:  -0.1,
+        transform: "translate",
+        tweenX: (s) => 0,
+        tweenY: (s) => {
+            return Math.cos(2*PANICSPEED*s);
+        },
+        tweenZ: (s) => 0,
+    },
+    {
+        part:"ruuparm",
+        min: -90,
+        max:  55,
+        transform: "rotate",
+        axis: "Z",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+            
+        } 
+    },
+    {
+        part:"luuparm",
+        min: -55,
+        max: 90,
+        transform: "rotate",
+        axis: "Z",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+        } 
+    },
+    // {
+    //     part:"rfoarm",
+    //     min: 30,
+    //     max:  90,
+    //     transform: "rotate",
+    //     axis: "Z",
+    //     tween: (s) => {
+    //         return Math.cos(SPEED*s+Math.PI/2);
+            
+    //     } 
+    // },
+    // {
+    //     part:"lfoarm",
+    //     min: 30,
+    //     max:  90,
+    //     transform: "rotate",
+    //     axis: "Z",
+    //     tween: (s) => {
+    //         return Math.sin(SPEED*s);
+    //     } 
+    // },
+    {
+        part:"lchest",
+        min: -25,
+        max: 25,
+        transform: "rotate",
+        axis: "Z",
+        tween: (s) => {
+            return Math.cos(PANICSPEED*s);
+        } 
+    },
+    {
+        part:"rfoot",
+        min: -50,
+        max: 0,
+        transform: "rotate",
+        axis: "Y",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+        } 
+    },
+    {
+        part:"lfoot",
+        min: 0,
+        max: 50,
+        transform: "rotate",
+        axis: "Y",
+        tween: (s) => {
+            return Math.sin(PANICSPEED*s);
+        } 
+    }
+]
+this.panicInit = [
+    {
+        part: "ruuparm",
+        transform: "rotate",
+        angle: -30, 
+        axis: "Z",       
+    },
+    {
+        part: "luuparm",
+        transform: "rotate",
+        angle: 30, 
+        axis: "Z",       
+    },
+    {
+        part: "ruuparm",
+        transform: "rotate",
+        angle: 0, 
+        axis: "X",       
+    },
+    {
+        part: "luuparm",
+        transform: "rotate",
+        angle: 0, 
+        axis: "X",       
+    },
 
+    {
+        part: "rfoarm",
+        transform: "rotate",
+        angle: 0, 
+        axis: "X",       
+    },
+    {
+        part: "lfoarm",
+        transform: "rotate",
+        angle: -0, 
+        axis: "X",       
+    },
+    {
+        part: "lchest",
+        transform: "rotate",
+        angle: 40, 
+        axis: "X",       
+    },
+    {
+        part: "lchest",
+        transform: "rotate",
+        angle: 0, 
+        axis: "Z",       
+    },
+
+    {
+        part:"cape",
+        transform:"rotate",
+        angle:-50,
+        axis:'X'
+    }
+]
     this.resetExplode();
 
     // this.growHeadAnim = [
@@ -783,6 +967,16 @@ class Jester {
     }
     runAnimation(){
         this.animate(this.runAnim);
+        this.body["cape"].animate((s, i, j)=>{
+            return 0.1*Math.cos(20*s + 0.5*j);
+        });
+    }
+
+    panicStart(){
+        this.startAnim(this.panicInit);
+    }
+    panicAnimation(){
+        this.animate(this.panicAnim);
         this.body["cape"].animate((s, i, j)=>{
             return 0.1*Math.cos(20*s + 0.5*j);
         });

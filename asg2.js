@@ -152,6 +152,15 @@ function addActionsForHtmlUI(){
     jester.runStart();
   }
 
+  document.getElementById("panicButton").onclick = function(ev){
+    console.log("hello")
+    sendTextToHTML("Anim: Panic", "anim");
+    g_animation = 2;
+    disableSlidersforAnim(jester.panicAnim);
+    jester.panicStart();
+  }
+
+
   document.getElementById("stopButton").onclick = function(ev){
     sendTextToHTML("Anim: None", "anim");
     enableAllSliders();
@@ -436,6 +445,11 @@ function tick(){
       jester.runAnimation();
       //console.log(jester.runAnim);
       updateSliders(jester.runAnim);
+    } break;
+    case 2:{
+      jester.panicAnimation();
+      //console.log(jester.runAnim);
+      updateSliders(jester.panicAnim);
     } break;
   }
    if (g_exploding){
