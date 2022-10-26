@@ -147,6 +147,8 @@ function addActionsForHtmlUI(){
   document.getElementById("runButton").onclick = function(ev){
     console.log("hello")
     sendTextToHTML("Anim: Run", "anim");
+    jester.createBody();
+    jester.transformBody();
     g_animation = 1;
     disableSlidersforAnim(jester.runAnim);
     jester.runStart();
@@ -154,6 +156,8 @@ function addActionsForHtmlUI(){
 
   document.getElementById("panicButton").onclick = function(ev){
     console.log("hello")
+    jester.createBody();
+    jester.transformBody();
     sendTextToHTML("Anim: Panic", "anim");
     g_animation = 2;
     disableSlidersforAnim(jester.panicAnim);
